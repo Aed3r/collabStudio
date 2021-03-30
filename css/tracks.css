@@ -1,0 +1,44 @@
+body, html {
+    height: 99%;
+    width: 100%;
+    margin: 0;
+    margin-top: 1%;
+    overflow: hidden;
+}
+
+#tracks {
+    overflow: scroll;
+    height: 98%;
+    position: relative;
+}
+
+.track {
+    height: 100px;
+    width: 10000px;
+}
+
+.track:nth-child(even) {
+    background-color: teal;
+}
+
+.trackHeader {
+    height: 100%;
+    width: 100px;
+    background-color: bisque;
+    text-align: center;
+    border: solid gray 1px;
+}
+
+#tracksCanvas {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    background-color: blue;
+    opacity: 0.5;
+    height: 100%;
+    width: 100%;
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}

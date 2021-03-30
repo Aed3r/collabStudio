@@ -1,0 +1,33 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>CollabStudio</title>
+    <meta name="description" content="Collaborative online editor">
+
+    <link rel="stylesheet" href="css/tracks.css">
+</head>
+
+<body>
+    <!-- TODO: include header -->
+    <template id="track-template">
+        <div class="track">
+            <div class="trackHeader">
+                <span class="trackID"></span>
+                <br>
+                <input type="button" class="muteBtn" value="mute"/>
+            </div>           
+        </div>
+    </template>
+
+    <div id="tracks">
+        
+    </div>
+    <canvas id="tracksCanvas">
+            
+    </canvas>
+    <script src="js/tracks.js"></script>
+</body>
+</html>
