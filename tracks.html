@@ -18,16 +18,18 @@
                 <span class="trackID"></span>
                 <br>
                 <input type="button" class="muteBtn" value="mute"/>
-            </div>           
+            </div>       
+            
+            <div class="trackBody">
+                <canvas id="trackCanvas"></canvas>    
+            </div>
         </div>
     </template>
 
-    <div id="tracks">
+    <div id="tracks" onscroll="drawMeasures()">
         
     </div>
-    <canvas id="tracksCanvas">
-            
-    </canvas>
+    
     <script src="js/tracks.js"></script>
 </body>
 </html>

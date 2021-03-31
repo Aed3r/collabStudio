@@ -9,15 +9,21 @@ body, html {
 #tracks {
     overflow: scroll;
     height: 98%;
-    position: relative;
 }
 
 .track {
     height: 100px;
-    width: 10000px;
+    width: 10000px; 
+    display: flex;
+    flex-direction: row;
 }
 
-.track:nth-child(even) {
+.trackBody {
+    height: 100%;
+    width: 100%;
+}
+
+.track:nth-child(odd) > .trackBody {
     background-color: teal;
 }
 
@@ -27,18 +33,18 @@ body, html {
     background-color: bisque;
     text-align: center;
     border: solid gray 1px;
-}
-
-#tracksCanvas {
     z-index: 1;
-    position: absolute;
-    top: 0;
-    background-color: blue;
-    opacity: 0.5;
-    height: 100%;
-    width: 100%;
+    position: sticky;
+    left: 0px;
 }
 
-::-webkit-scrollbar { 
-    display: none; 
+#trackCanvas {
+    z-index: 2;
+    position: absolute;
+    left: 100px;
+    background-color: darkorange;
+    opacity: 0.5;
+    height: 100px;
+    width: 100%;
+    pointer-events: none;
 }
