@@ -1,5 +1,6 @@
 var tracks = document.getElementById("tracks");
 var trackTemplate = document.getElementById('track-template').content;
+var canvases = []
 
 // Crée un nouveau div servant de piste
 function newTrack(id) {
@@ -12,15 +13,16 @@ function newTrack(id) {
 }
 
 // Crée toutes les pistes initiales
-for (i = 0; i < 500; i++) {
-    document.createElement("div");
-    tracks.appendChild(newTrack(i + 1));
+for (let i = 0; i < 500; i++) {
+    var track = newTrack(i + 1);
+    canvases.push(track.querySelector(".trackCanvas"));
+    tracks.appendChild(track);
 }
 
 // On initialise la résolution des canvas
 var cWidth = document.querySelector(".trackBody").clientWidth;
 var cHeight = document.querySelector(".track").clientHeight;
-document.querySelectorAll(".trackCanvas").forEach(canvas => {
+canvases.forEach(canvas => {
     canvas.width = cWidth;
     canvas.height = cHeight;
 });
@@ -29,18 +31,19 @@ var headersOnLeft = true; // Flag tenant compte si on se trouve au début des pi
 
 // Met en place l'affichage des temps et mesures
 function drawMeasures() {
-    var xScroll = tracks.scrollTop;
-    var yScroll = tracks.scrollLeft; // Pixels horizontales défilé
-    var oneSecWidth = document.querySelector(".trackBody").clientWidth / 30;
+    var xScroll = tracks.scrollLeft; // Pixels verticales défilé
+    var yScroll = tracks.scrollTop; // Pixels horizontales défilé
+    var oneSecWidth = Math.floor(document.querySelector(".trackBody").clientWidth / 30);
+    var trackHeight = document.querySelector(".track").clientHeight;
 
     // Activation/désactivation de l'ombre
-    if (yScroll > 0 && headersOnLeft) {
+    if (xScroll > 0 && headersOnLeft) {
         // On affiche l'ombre
         headersOnLeft = false;
         document.querySelectorAll(".trackHeader").forEach(header => {
             header.style.boxShadow = "10px 20px 30px darkslategray";
         });
-    } else if (yScroll == 0 && !headersOnLeft) {
+    } else if (xScroll == 0 && !headersOnLeft) {
         // On enlève l'ombre
         headersOnLeft = true;
         document.querySelectorAll(".trackHeader").forEach(header => {
@@ -48,20 +51,21 @@ function drawMeasures() {
         });
     }
 
-    var start = (yScroll + document.querySelector(".trackHeader").clientWidth + oneSecWidth) % oneSecWidth;
+    var start = oneSecWidth - Math.floor(xScroll % oneSecWidth);
+    console.log(yScroll + " " + trackHeight + " " + document.body.clientHeight + " " + Math.floor(yScroll / trackHeight) + " " + Math.ceil((yScroll + document.body.clientHeight) / trackHeight));
     // Dessine les mesures sur la piste suivant le défilement horizontal
-    document.querySelectorAll(".trackCanvas").forEach(canvas => {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
+    for (let i = Math.floor(yScroll / trackHeight); i < Math.ceil((yScroll + document.body.clientHeight) / trackHeight); i++) {
+        const ctx = canvases[i].getContext('2d');
+        ctx.clearRect(0, 0, canvases[i].width, trackHeight);
         ctx.beginPath();
         ctx.lineWidth = 3;
 
-        for (var x = start; x < canvas.width - 20; x += oneSecWidth) {
+        for (var x = start; x < canvases[i].width - 20; x += oneSecWidth) {
             ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
+            ctx.lineTo(x, trackHeight);
         }
         ctx.stroke();
-    });
+    }
 }
 
 // On trace les premières mesures
