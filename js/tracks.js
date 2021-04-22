@@ -1,6 +1,9 @@
-var tracks = document.getElementById("tracks");
-var trackTemplate = document.getElementById('track-template').content;
-var canvases = []
+var secondsToShow = 30;
+var nbPistes = 500;
+var xMarker = 2000;
+var colLimites = 'darkslategray';
+var colMarqueur = 'crimson';
+var tailleMarqueur = 10; //px
 
 // Crée un nouveau div servant de piste
 function newTrack(id) {
@@ -13,60 +16,212 @@ function newTrack(id) {
 }
 
 // Crée toutes les pistes initiales
-for (let i = 0; i < 500; i++) {
-    var track = newTrack(i + 1);
-    canvases.push(track.querySelector(".trackCanvas"));
+var tracks = document.getElementById("tracks");
+let trackTemplate = document.getElementById('track-template').content;
+for (let i = 1; i <= nbPistes; i++) {
+    var track = newTrack(i);
     tracks.appendChild(track);
 }
 
-// On initialise la résolution des canvas
-var cWidth = document.querySelector(".trackBody").clientWidth;
-var cHeight = document.querySelector(".track").clientHeight;
-canvases.forEach(canvas => {
-    canvas.width = cWidth;
-    canvas.height = cHeight;
-});
+var timeKeepHeight = document.getElementById("top").clientHeight;
+var topDiv = document.getElementById("top");
+var trackHeight = document.querySelector(".track").clientHeight;
+var cornerDiv = document.getElementById("corner");
 
-var headersOnLeft = true; // Flag tenant compte si on se trouve au début des pistes
-
-// Met en place l'affichage des temps et mesures
+// Met en place l'affichage des temps et mesures ainsi que les ombres
 function drawMeasures() {
-    var xScroll = tracks.scrollLeft; // Pixels verticales défilé
-    var yScroll = tracks.scrollTop; // Pixels horizontales défilé
-    var oneSecWidth = Math.floor(document.querySelector(".trackBody").clientWidth / 30);
-    var trackHeight = document.querySelector(".track").clientHeight;
+    let xScroll = tracks.scrollLeft; // Pixels verticales défilé
+    let yScroll = tracks.scrollTop; // Pixels horizontales défilé
+    let oneSecWidth = Math.round(tracksCanvas.width / secondsToShow);
 
-    // Activation/désactivation de l'ombre
-    if (xScroll > 0 && headersOnLeft) {
+
+    // Activation/désactivation de l'ombre verticale
+    if (xScroll > 0) {
         // On affiche l'ombre
-        headersOnLeft = false;
         document.querySelectorAll(".trackHeader").forEach(header => {
-            header.style.boxShadow = "10px 20px 30px darkslategray";
+            header.style.boxShadow = "10px 0 20px -10px " + colLimites;
         });
-    } else if (xScroll == 0 && !headersOnLeft) {
+        cornerDiv.style.boxShadow = "10px 0 20px -10px " + colLimites;
+    } else {
         // On enlève l'ombre
-        headersOnLeft = true;
         document.querySelectorAll(".trackHeader").forEach(header => {
             header.style.boxShadow = "";
         });
+        cornerDiv.style.boxShadow = "";
     }
 
-    var start = oneSecWidth - Math.floor(xScroll % oneSecWidth);
-    console.log(yScroll + " " + trackHeight + " " + document.body.clientHeight + " " + Math.floor(yScroll / trackHeight) + " " + Math.ceil((yScroll + document.body.clientHeight) / trackHeight));
-    // Dessine les mesures sur la piste suivant le défilement horizontal
-    for (let i = Math.floor(yScroll / trackHeight); i < Math.ceil((yScroll + document.body.clientHeight) / trackHeight); i++) {
-        const ctx = canvases[i].getContext('2d');
-        ctx.clearRect(0, 0, canvases[i].width, trackHeight);
-        ctx.beginPath();
-        ctx.lineWidth = 3;
+    // Activation/désactivation de l'ombre horizontale
+    if (yScroll > 0) {
+        // On affiche l'ombre
+        topDiv.style.boxShadow = "0 10px 20px -10px " + colLimites;
+    } else {
+        // On enlève l'ombre
+        topDiv.style.boxShadow = "";
+    }
 
-        for (var x = start; x < canvases[i].width - 20; x += oneSecWidth) {
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, trackHeight);
-        }
-        ctx.stroke();
+    // Dessine les mesures sur les pistes visibles suivant le défilement horizontal
+    var start = oneSecWidth - Math.floor(xScroll % oneSecWidth);
+
+    let ctx = tracksCanvas.getContext('2d');
+    ctx.clearRect(0, 0, tracksCanvas.width, tracksCanvas.height);
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = colLimites;
+    ctx.fillStyle = colLimites;
+    ctx.font = '10px Open Sans';
+
+    for (let x = start; x < tracksCanvas.width - 20; x += oneSecWidth) {
+        // lignes
+        ctx.moveTo(x, timeKeepHeight);
+        ctx.lineTo(x, tracksCanvas.height);
+
+        // temps
+        let sec = Math.round((x + xScroll) / oneSecWidth);
+        let min = Math.floor(sec / 60);
+        sec = Math.round(sec % 60);
+
+        let txt = "";
+        if (min < 10) txt += "0";
+        txt += min;
+        txt += ":";
+        if (sec < 10) txt += "0";
+        txt += sec;
+
+        ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, oneSecWidth);
+    }
+    ctx.stroke();
+
+    // On affiche le marqueur
+    drawMarker();
+}
+
+// Trace le marqueur
+function drawMarker() {
+    let xScroll = tracks.scrollLeft; // Pixels verticales défilé
+
+    // On vérifie qu'il est visible
+    if (xMarker < xScroll - tailleMarqueur / 2 || xMarker > xScroll + document.body.clientWidth + tailleMarqueur / 2) return;
+
+    let ctx = tracksCanvas.getContext('2d');
+
+    // Tête
+    ctx.fillStyle = colMarqueur;
+    ctx.beginPath();
+    ctx.moveTo(xMarker - xScroll, timeKeepHeight);
+    ctx.lineTo(xMarker - xScroll - tailleMarqueur / 2, timeKeepHeight - tailleMarqueur / 2);
+    ctx.lineTo(xMarker - xScroll - tailleMarqueur / 2, timeKeepHeight - tailleMarqueur);
+    ctx.lineTo(xMarker - xScroll + tailleMarqueur / 2, timeKeepHeight - tailleMarqueur);
+    ctx.lineTo(xMarker - xScroll + tailleMarqueur / 2, timeKeepHeight - tailleMarqueur / 2);
+    ctx.closePath();
+    ctx.fill();
+
+    // Queue
+    ctx.strokeStyle = colMarqueur;
+    ctx.beginPath();
+    ctx.moveTo(xMarker - xScroll, timeKeepHeight);
+    ctx.lineTo(xMarker - xScroll, tracksCanvas.height);
+    ctx.stroke();
+}
+
+// Met à jour le marqueur à partir d'un évenement
+function updateMarker(e) {
+    xMarker = e.x + tracks.scrollLeft - cornerDiv.clientWidth;
+    drawMeasures();
+}
+
+// On place le marqueur au clic simple
+topDiv.addEventListener("click", function(e) {
+    updateMarker(e);
+}, false);
+
+var markerDragged = false;
+
+// On suit la souris lors d'un clic + drag
+topDiv.addEventListener("mousedown", function() {
+    markerDragged = true;
+}, false);
+
+document.addEventListener("mousemove", function(e) {
+    if (markerDragged) updateMarker(e);
+}, false);
+
+document.addEventListener("mouseup", function() {
+    markerDragged = false;
+}, false);
+
+// On initialise la résolution du canvas
+var tracksCanvas = document.getElementById("tracksCanvas");
+
+// https://stackoverflow.com/a/15666143
+var PIXEL_RATIO = (function() {
+    var ctx = document.createElement("canvas").getContext("2d"),
+        dpr = window.devicePixelRatio || 1,
+        bsr = ctx.webkitBackingStorePixelRatio ||
+        ctx.mozBackingStorePixelRatio ||
+        ctx.msBackingStorePixelRatio ||
+        ctx.oBackingStorePixelRatio ||
+        ctx.backingStorePixelRatio || 1;
+
+    return dpr / bsr;
+})();
+
+function initCanvas() {
+    let ratio = PIXEL_RATIO;
+    tracksCanvas.width = tracksCanvas.clientWidth * ratio;
+    tracksCanvas.height = tracksCanvas.clientHeight * ratio;
+    tracksCanvas.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    // On trace les premières mesures
+    drawMeasures();
+
+    // On place le marqueur
+    drawMarker();
+}
+
+initCanvas();
+
+function volSliderMouseDown(elem) {
+    elem.parentNode.dataset.mouseDown = true;
+}
+
+function volSliderMouseMove(event, elem) {
+    if (elem.dataset.mouseDown === "true") {
+        let slider = elem.querySelector(".slider");
+        let handle = elem.querySelector(".handle");
+        let pos = event.clientX;
+
+        setSliderPos(slider, handle, elem, pos);
     }
 }
 
-// On trace les premières mesures
-drawMeasures();
+function setSliderPos(slider, handle, elem, pos) {
+    let rect = slider.getBoundingClientRect();
+
+    if (pos > rect.x + rect.width - 9) pos = rect.x + rect.width - 9;
+    else if (pos < rect.x) pos = rect.x;
+
+    rect = elem.getBoundingClientRect();
+    pos -= rect.x;
+
+    handle.style.left = pos + "px";
+}
+
+function volSliderMouseUp(elem) {
+    elem.querySelector(".volumeSlider").dataset.mouseDown = false;
+}
+
+function volSliderMute(elem) {
+    let parent = elem.parentNode;
+    let slider = parent.querySelector(".slider");
+    let handle = parent.querySelector(".handle");
+
+    setSliderPos(slider, handle, parent, 0);
+}
+
+function volSliderFull(elem) {
+    let parent = elem.parentNode;
+    let slider = parent.querySelector(".slider");
+    let handle = parent.querySelector(".handle");
+
+    setSliderPos(slider, handle, parent, 1000);
+}
