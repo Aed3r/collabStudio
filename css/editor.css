@@ -1,3 +1,7 @@
+* {
+    user-select: none;
+}
+
 #bottomDiv {
     position: absolute;
     display: flex;
@@ -7,7 +11,7 @@
     width: calc(100% - 60px);
 }
 
-#tracks {
+#tracksFrame {
     width: 70%;
     height: 100%;
     border: none;
@@ -20,9 +24,34 @@
     border: 1px solid darkslategray;
     border-radius: 10px;
     display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
 }
 
-#contentSelector span {
-    padding: 5px;
+#selectorSpan {
+    top: -20px;
     font-family: 'Open Sans', sans-serif;
+    position: absolute;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+}
+
+.soundItem {
+    width: 30%;
+    height: 100px;
+    margin: 5px;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    vertical-align: bottom;
+}
+
+.itemName {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    color: beige;
+    text-shadow: 1px 1px 2px black; 
 }

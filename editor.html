@@ -11,13 +11,23 @@
 </head>
 
 <body>
+    <!-- TODO: include header -->
+
+    <template id="item-template">
+        <div class="soundItem" onclick="selectItem(this)">
+            <span class="itemName"></span>
+        </div>
+    </template>
+
     <div id="bottomDiv">
         <div id="contentSelector">
-            <span>Sélection de contenu</span>
+            <span id="selectorSpan">Sélection de contenu</span>
         </div>
 
-        <iframe id="tracks" src="tracks.html"></iframe>
+        <iframe id="tracksFrame" src="tracks.html" title="tracks" sandbox="allow-same-origin allow-scripts"></iframe>
     </div>
+
+    <script src="js/editor.js"></script>
 </body>
 
 </html>
