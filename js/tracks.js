@@ -23,9 +23,7 @@ for (let i = 1; i <= nbPistes; i++) {
     tracks.appendChild(track);
 }
 
-var timeKeepHeight = document.getElementById("top").clientHeight;
 var topDiv = document.getElementById("top");
-var trackHeight = document.querySelector(".track").clientHeight;
 var cornerDiv = document.getElementById("corner");
 
 // Met en place l'affichage des temps et mesures ainsi que les ombres
@@ -33,7 +31,7 @@ function drawMeasures() {
     let xScroll = tracks.scrollLeft; // Pixels verticales défilé
     let yScroll = tracks.scrollTop; // Pixels horizontales défilé
     let oneSecWidth = Math.round(tracksCanvas.width / secondsToShow);
-
+    let timeKeepHeight = topDiv.clientHeight;
 
     // Activation/désactivation de l'ombre verticale
     if (xScroll > 0) {
@@ -98,6 +96,7 @@ function drawMeasures() {
 // Trace le marqueur
 function drawMarker() {
     let xScroll = tracks.scrollLeft; // Pixels verticales défilé
+    let timeKeepHeight = topDiv.clientHeight;
 
     // On vérifie qu'il est visible
     if (xMarker < xScroll - tailleMarqueur / 2 || xMarker > xScroll + document.body.clientWidth + tailleMarqueur / 2) return;
@@ -179,6 +178,8 @@ function initCanvas() {
 }
 
 initCanvas();
+
+window.addEventListener("resize", initCanvas);
 
 function volSliderMouseDown(elem) {
     elem.parentNode.dataset.mouseDown = true;

@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>CollabStudio</title>
+    <title>CollabStudio Tracks</title>
     <meta name="description" content="Collaborative online editor">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -13,11 +13,7 @@
     <link rel="stylesheet" href="css/tracks.css">
 </head>
 
-<body onresize="initCanvas()">
-    <!-- TODO: include header -->
-
-    <!-- Slider de volume -->
-
+<body>
     <!-- Template représentant une piste -->
     <template id="track-template">
         <div class="track" onmouseup="volSliderMouseUp(this)">
@@ -32,7 +28,7 @@
                 </div>
             </div>       
             
-            <div class="trackBody">  
+            <div class="trackBody" onclick="parent.putItem()">  
             </div>
         </div>
     </template>
