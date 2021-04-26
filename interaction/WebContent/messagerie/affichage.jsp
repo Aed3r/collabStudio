@@ -11,7 +11,7 @@
 		<%@page import="java.util.List"%>
 		<jsp:useBean id="listeMessages" class="tchatche.GestionMessages" scope="application"></jsp:useBean>
 		
-		<h1>Bonjour <%= (String) session.getAttribute("pseudo") %></h1>
+		<h1>Bonjour ${sessionScope.sessionU.pseudo}</h1>
 		<% for (Message msg : listeMessages.getMsg()) { %>
 			<%="[" + msg.getDate() + "] " + msg.getUser() + " : " + msg.getMessage() + "<br>"%>
 		<% } %>

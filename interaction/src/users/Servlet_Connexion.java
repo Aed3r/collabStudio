@@ -22,6 +22,7 @@ public class Servlet_Connexion extends HttpServlet {
 		//on crée une session pour l'utilisateur
 		HttpSession session = request.getSession();
 		session.setAttribute("sessionU", user);
+		session.setAttribute("pseudo", user.getPseudo());
 		
 		//request.setAttribute("co", co);
 		request.setAttribute("user", user);

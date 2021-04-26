@@ -19,7 +19,7 @@
         </p>
 	
 	<h1> Bienvenue sur la page d'acceuil de Collabo_studio</h1>
-	<a href="messagerie/index.html"> Messagerie pour discuter pépouse à la bien</a> <br>
+	<a href="messagerie/tchatche.html"> Messagerie pour discuter pépouse à la bien</a> <br>
 	<a href="inscription.jsp"> Inscription par ici mon kiki</a> <br>
 	<a href="connexion.jsp"> Connexion du con</a> <br>
 	<a href="<%=request.getContextPath()+"/Servlet_Deconnexion"%>">Déconnexion</a>
