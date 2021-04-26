@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<web-app> 
+<display-name>collab_studio</display-name>
+<session-config> 
+		<session-timeout>1</session-timeout>
+</session-config>
+<servlet> 
+	<servlet-name>Servlet_Connexion</servlet-name> 
+	<servlet-class>users.Servlet_Connexion</servlet-class> 
+</servlet>
+<servlet-mapping> 
+	<servlet-name>Servlet_Connexion</servlet-name> 
+	<url-pattern>/Servlet_Connexion</url-pattern> 
+</servlet-mapping> 
+
+<servlet> 
+	<servlet-name>Servlet_liste</servlet-name> 
+	<servlet-class>users.Servlet_liste</servlet-class> 
+</servlet>
+<servlet-mapping> 
+	<servlet-name>Servlet_liste</servlet-name> 
+	<url-pattern>/Servlet_liste</url-pattern> 
+</servlet-mapping> 
+
+<servlet> 
+	<servlet-name>Servlet_Deconnexion</servlet-name> 
+	<servlet-class>users.Servlet_Deconnexion</servlet-class> 
+</servlet>
+<servlet-mapping> 
+	<servlet-name>Servlet_Deconnexion</servlet-name> 
+	<url-pattern>/Servlet_Deconnexion</url-pattern> 
+</servlet-mapping> 
+</web-app>
