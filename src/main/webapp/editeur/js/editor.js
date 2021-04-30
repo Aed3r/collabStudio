@@ -1,12 +1,12 @@
-var itemColors = ["d9ed92","b5e48c","99d98c","76c893","52b69a","34a0a4","168aad","1a759f","1e6091","184e77", '1e6091', '1a759f', '168aad', '34a0a4', '52b69a', '76c893', '99d98c', 'b5e48c'];
+var itemColors = ["d9ed92", "b5e48c", "99d98c", "76c893", "52b69a", "34a0a4", "168aad", "1a759f", "1e6091", "184e77", '1e6091', '1a759f', '168aad', '34a0a4', '52b69a', '76c893', '99d98c', 'b5e48c'];
 
 var selector = document.getElementById("contentSelector");
 var itemTemplate = document.getElementById('item-template').content;
 var itemCounter = 0;
 var tracksFrame = document.getElementById("tracksFrame");
 
-tracksFrame.removeAttribute("src");
-var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
+//tracksFrame.removeAttribute("src");
+//var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
 
 function newItem(id, title) {
     let template = itemTemplate.cloneNode(true);

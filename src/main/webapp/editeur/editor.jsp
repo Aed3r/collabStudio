@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
@@ -24,7 +26,9 @@
             <span id="selectorSpan">Sélection de contenu</span>
         </div>
 
-        <iframe id="tracksFrame" src="tracks.html" title="tracks" sandbox="allow-same-origin allow-scripts"></iframe>
+        <div id="tracksFrame">
+        	<%@ include file = "tracks.html" %>
+        </div>
     </div>
 
     <script src="js/editor.js"></script>

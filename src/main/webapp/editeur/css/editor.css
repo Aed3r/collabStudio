@@ -15,6 +15,7 @@
     width: 70%;
     height: 100%;
     border: none;
+    position: relative;
 }
 
 #contentSelector {
@@ -53,5 +54,5 @@
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     color: beige;
-    text-shadow: 1px 1px 2px black; 
+    text-shadow: 1px 1px 2px black;
 }
