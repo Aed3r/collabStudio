@@ -19,10 +19,11 @@
 }
 
 #contentSelector {
-    height: 100%;
+    height: calc(100% - 30px);
     width: 30%;
     margin-right: 30px;
-    border: 1px solid darkslategray;
+    margin-top: 30px;
+    border: 1px solid gray;
     border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
@@ -30,7 +31,7 @@
 }
 
 #selectorSpan {
-    top: -20px;
+    top: 5px;
     font-family: 'Open Sans', sans-serif;
     position: absolute;
     font-family: 'Open Sans', sans-serif;

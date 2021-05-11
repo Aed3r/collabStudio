@@ -3,7 +3,8 @@ var nbPistes = 500;
 var xMarker = 2000;
 var colLimites = 'darkslategray';
 var colMarqueur = 'crimson';
-var tailleMarqueur = 10; //px
+var tailleMarqueur = 10; // px
+var distanceFadeIn = 100; // px
 
 // Crée un nouveau div servant de piste
 function newTrack(id) {
@@ -30,35 +31,17 @@ var cornerDiv = document.getElementById("corner");
 function drawMeasures() {
     let xScroll = tracks.scrollLeft; // Pixels verticales défilé
     let yScroll = tracks.scrollTop; // Pixels horizontales défilé
-    let oneSecWidth = Math.round(tracksCanvas.width / secondsToShow);
+    let measureWidth = getMeasureWidth();
     let timeKeepHeight = topDiv.clientHeight;
 
     // Activation/désactivation de l'ombre verticale
-    if (xScroll > 0) {
-        // On affiche l'ombre
-        document.querySelectorAll(".trackHeader").forEach(header => {
-            header.style.boxShadow = "10px 0 20px -10px " + colLimites;
-        });
-        cornerDiv.style.boxShadow = "10px 0 20px -10px " + colLimites;
-    } else {
-        // On enlève l'ombre
-        document.querySelectorAll(".trackHeader").forEach(header => {
-            header.style.boxShadow = "";
-        });
-        cornerDiv.style.boxShadow = "";
-    }
+    document.getElementById("ombreH").style.opacity = Math.min(yScroll / distanceFadeIn, 1);
 
     // Activation/désactivation de l'ombre horizontale
-    if (yScroll > 0) {
-        // On affiche l'ombre
-        topDiv.style.boxShadow = "0 10px 20px -10px " + colLimites;
-    } else {
-        // On enlève l'ombre
-        topDiv.style.boxShadow = "";
-    }
+    document.getElementById("ombreV").style.opacity = Math.min(xScroll / distanceFadeIn, 1);
 
     // Dessine les mesures sur les pistes visibles suivant le défilement horizontal
-    var start = oneSecWidth - Math.floor(xScroll % oneSecWidth);
+    var start = measureWidth - Math.floor(xScroll % measureWidth);
 
     let ctx = tracksCanvas.getContext('2d');
     ctx.clearRect(0, 0, tracksCanvas.width, tracksCanvas.height);
@@ -68,13 +51,13 @@ function drawMeasures() {
     ctx.fillStyle = colLimites;
     ctx.font = '10px Open Sans';
 
-    for (let x = start; x < tracksCanvas.width - 20; x += oneSecWidth) {
+    for (let x = start; x < tracksCanvas.width - 20; x += measureWidth) {
         // lignes
         ctx.moveTo(x, timeKeepHeight);
         ctx.lineTo(x, tracksCanvas.height);
 
         // temps
-        let sec = Math.round((x + xScroll) / oneSecWidth);
+        let sec = Math.round((x + xScroll) / measureWidth);
         let min = Math.floor(sec / 60);
         sec = Math.round(sec % 60);
 
@@ -85,7 +68,7 @@ function drawMeasures() {
         if (sec < 10) txt += "0";
         txt += sec;
 
-        ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, oneSecWidth);
+        ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, measureWidth);
     }
     ctx.stroke();
 
@@ -124,8 +107,11 @@ function drawMarker() {
 
 // Met à jour le marqueur à partir d'un évenement
 function updateMarker(e) {
-    xMarker = e.x + tracks.scrollLeft - cornerDiv.clientWidth;
-    drawMeasures();
+    if (e.srcElement.id == "top") {
+        xMarker = e.layerX + tracks.scrollLeft - cornerDiv.clientWidth;
+        console.log(e.offsetX);
+        drawMeasures();
+    }
 }
 
 // On place le marqueur au clic simple
@@ -225,4 +211,8 @@ function volSliderFull(elem) {
     let handle = parent.querySelector(".handle");
 
     setSliderPos(slider, handle, parent, 1000);
+}
+
+function getMeasureWidth() {
+    return Math.round(tracksCanvas.clientWidth / secondsToShow);
 }

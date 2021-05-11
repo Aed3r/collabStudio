@@ -1,9 +1,9 @@
 var itemColors = ["d9ed92", "b5e48c", "99d98c", "76c893", "52b69a", "34a0a4", "168aad", "1a759f", "1e6091", "184e77", '1e6091', '1a759f', '168aad', '34a0a4', '52b69a', '76c893', '99d98c', 'b5e48c'];
-
 var selector = document.getElementById("contentSelector");
 var itemTemplate = document.getElementById('item-template').content;
 var itemCounter = 0;
 var tracksFrame = document.getElementById("tracksFrame");
+var track = {};
 
 //tracksFrame.removeAttribute("src");
 //var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
@@ -44,6 +44,10 @@ function selectItem(elem) {
     elem.style.boxShadow = "0px 0px 4px 4px " + elem.style.backgroundColor;
 }
 
-function putItem() {
-    console.log("yo");
+function putItem(e) {
+    measureWidth = getMeasureWidth();
+
+    // On trouve la mesure la plus proche
+    time = e.layerX / measureWidth;
+    console.log(time);
 }
