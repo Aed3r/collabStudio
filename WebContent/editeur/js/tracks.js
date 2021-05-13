@@ -167,6 +167,8 @@ initCanvas();
 
 window.addEventListener("resize", initCanvas);
 
+/* Slider de volume */
+
 function volSliderMouseDown(elem) {
     elem.parentNode.dataset.mouseDown = true;
 }

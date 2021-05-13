@@ -3,7 +3,7 @@ var selector = document.getElementById("contentSelector");
 var itemTemplate = document.getElementById('item-template').content;
 var itemCounter = 0;
 var tracksFrame = document.getElementById("tracksFrame");
-var track = {};
+var track = new LinkedList();
 
 //tracksFrame.removeAttribute("src");
 //var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
@@ -24,7 +24,7 @@ for (let i = 1; i <= 50; i++) {
     selector.appendChild(newItem(i, "Item " + i));
 }
 
-var selected = null
+var selected = null;
 
 function selectItem(elem) {
     // Si elem est select on le deselect
@@ -45,9 +45,37 @@ function selectItem(elem) {
 }
 
 function putItem(e) {
-    measureWidth = getMeasureWidth();
+    let measureWidth = getMeasureWidth();
+    let tracks = document.getElementById("tracks");
+    let cornerDiv = document.getElementById("corner");
+    let track1 = document.getElementById("track1");
+
+    // Position du clic sur le canvas
+    let posX = e.layerX - cornerDiv.clientWidth;
+    let posY = e.layerY;
 
     // On trouve la mesure la plus proche
-    time = e.layerX / measureWidth;
-    console.log(time);
+    let time = Math.floor(posX / measureWidth) * 1000;
+    let trackID = Math.ceil(posY / track1.clientHeight);
+    
+    track.insert(time, {trackID: trackID, sound: selected});
 }
+
+/*
+    let canvasX = e.layerX - tracks.scrollLeft - cornerDiv.clientWidth;
+    let canvasY = e.layerY - tracks.scrollTop + cornerDiv.clientHeight;
+
+    // On trouve la mesure la plus proche
+    let time = Math.floor(canvasX / measureWidth);
+    let track = Math.floor(canvasY / track1.clientHeight);
+    console.log(time);
+
+    ctx = document.getElementById("tracksCanvas").getContext('2d');
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(time*measureWidth-20, track*track1.clientHeight-20);
+    ctx.lineTo(time*measureWidth+20, track*track1.clientHeight+20);
+    ctx.moveTo(time*measureWidth-20, track*track1.clientHeight+20);
+    ctx.lineTo(time*measureWidth+20, track*track1.clientHeight-20);
+    ctx.stroke();
+    */

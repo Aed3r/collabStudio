@@ -31,6 +31,7 @@
         </div>
     </div>
 
+    <script src="js/linkedList.js"></script>
     <script src="js/editor.js"></script>
 </body>
 
