@@ -12,3 +12,4 @@
 !*.js
 !*.svg
 !.gitignore
+/build/
