@@ -12,6 +12,7 @@ function newTrack(id) {
 
     template.querySelector(".track").setAttribute("id", "track" + id);
     template.querySelector(".trackID").innerHTML = "Track " + id;
+    template.querySelector(".trackBody").setAttribute("id", "trackBody" + id);
 
     return template;
 }
@@ -109,7 +110,6 @@ function drawMarker() {
 function updateMarker(e) {
     if (e.srcElement.id == "top") {
         xMarker = e.layerX + tracks.scrollLeft - cornerDiv.clientWidth;
-        console.log(e.offsetX);
         drawMeasures();
     }
 }
@@ -215,6 +215,17 @@ function volSliderFull(elem) {
     setSliderPos(slider, handle, parent, 1000);
 }
 
+function volSliderSet(event, elem) {
+    let parent = elem.parentNode;
+    let handle = parent.querySelector(".handle");
+
+    setSliderPos(elem, handle, parent, event.clientX);
+}
+
 function getMeasureWidth() {
     return Math.round(tracksCanvas.clientWidth / secondsToShow);
+}
+
+function getNbPistes() {
+    return nbPistes;
 }

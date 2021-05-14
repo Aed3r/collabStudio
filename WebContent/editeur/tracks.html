@@ -22,13 +22,13 @@
                 <br>
                 <div class="volumeSlider" onmousemove="volSliderMouseMove(event, this)">
                     <span class="volLowIcon" onclick="volSliderMute(this)"></span>
-                    <div class="slider"></div>
+                    <div class="slider" onclick="volSliderSet(event, this)"></div>
                     <div class="handle" onmousedown="volSliderMouseDown(this)"></div>
                     <span class="volHighIcon" onclick="volSliderFull(this)"></span>
                 </div>
             </div>       
             
-            <div class="trackBody" onclick="putItem(event)">  
+            <div class="trackBody" onmouseup="putItem(event)" onmousemove="editorMouseMove(event)">  
             </div>
         </div>
     </template>

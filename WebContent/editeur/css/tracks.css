@@ -30,6 +30,7 @@ body {
 .trackBody {
     height: 100%;
     width: 100%;
+    position: relative;
 }
 
 .track:nth-child(odd)>.trackBody {
@@ -42,7 +43,7 @@ body {
     background-color: bisque;
     text-align: center;
     border: solid gray 1px;
-    z-index: 1;
+    z-index: 4;
     position: sticky;
     left: 0px;
 }
@@ -59,18 +60,20 @@ body {
     width: calc(100% - 100px);
     pointer-events: none;
     top: 0;
+    z-index: 2;
 }
 
 #top {
     display: flex;
     flex-direction: row;
-    z-index: 2;
+    z-index: 4;
+    cursor: pointer;
 }
 
 #corner {
     width: 100px;
     height: 30px;
-    z-index: 3;
+    z-index: 5;
 }
 
 .volumeSlider {
@@ -87,6 +90,7 @@ body {
     width: 10px;
     height: 10px;
     display: block;
+    cursor: pointer;
 }
 
 .volumeSlider .slider {
@@ -97,6 +101,7 @@ body {
     margin-right: 3px;
     margin-left: 1px;
     transition: height ease 0.1s;
+    cursor: pointer;
 }
 
 .volumeSlider:hover .slider {
@@ -110,6 +115,7 @@ body {
     background-color: black;
     position: absolute;
     right: 10px;
+    cursor: grab;
 }
 
 .volumeSlider .volHighIcon {
@@ -117,6 +123,7 @@ body {
     width: 10px;
     height: 10px;
     display: block;
+    cursor: pointer;
 }
 
 #ombreH {
@@ -128,7 +135,7 @@ body {
     background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
     background: -ms-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
     opacity: 0;
-    z-index: 3;
+    z-index: 5;
 }
 
 #ombreV {
@@ -142,5 +149,13 @@ body {
     background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.2), transparent);
     background: -ms-linear-gradient(left, rgba(0, 0, 0, 0.2), transparent);
     opacity: 0;
+    z-index: 5;
+}
+
+.itemInEditor {
+    position: absolute;
+    top: 1px;
+    border-radius: 5px;
     z-index: 3;
+    cursor: grab;
 }
