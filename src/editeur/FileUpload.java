@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 /**
- * Servlet implementation class FileUpload
+ * Reçoit les fichiers transmis depuis l'éditeur, les stock puis lance WebSocketHandler.sendNewFilesUpdate() qui informe les utilisateurs des nouveaux fichiers
  */
 @WebServlet("/FileUpload")
 @MultipartConfig
@@ -35,11 +35,6 @@ public class FileUpload extends HttpServlet {
         uploadsFolder = new File(System.getProperty("user.home"), "collabStudioUploads");
         if (!uploadsFolder.exists()) uploadsFolder.mkdir();
     }
-    
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

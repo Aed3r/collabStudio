@@ -14,6 +14,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+/**
+ * Maintient les connections WebSocket lors de l'utilisation de l'éditeur et permet d'informer les utilisateurs de nouveaux fichiers
+ */
 @ServerEndpoint(value="/wsHandler")
 public class WebSocketHandler {
 	static List<Session> sessions = new ArrayList<>();
@@ -21,15 +24,6 @@ public class WebSocketHandler {
 	@OnOpen 
 	public void open(Session session) {
 		sessions.add(session);
-		
-		/*
-		try {
-			session.getBasicRemote().sendText("yo");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 	}
 	
 	@OnClose
@@ -41,11 +35,6 @@ public class WebSocketHandler {
 	public void onError(Throwable t) {
 		t.printStackTrace();
 		System.err.println(t.getMessage());
-	}
-	
-	@OnMessage
-	public void onMessage(Session session, String message) {
-
 	}
 	
 	static void sendNewFilesUpdate (List<List<String>> newFiles) {	

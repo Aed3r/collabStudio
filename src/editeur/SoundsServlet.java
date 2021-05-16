@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ImageServlet
+ * Permet l'accès aux fichiers transmis par les utilisateurs
  */
 @WebServlet("/sounds/*")
 public class SoundsServlet extends HttpServlet {
