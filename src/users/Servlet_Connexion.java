@@ -9,12 +9,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+/**
+ * Classe héritant de HttpServlet, Servlet qui permet la connexion de l'utilisateur, en lui créeant une session
+ */
 @WebServlet("/Servlet_Connexion")
 public class Servlet_Connexion extends HttpServlet {
+	/**
+     * Méthode dans le cas d'un accès par la méthode "Get", redirection vers la jsp de connexion
+     * @param request La requête reçue par la Servlet
+     * @param response La réponse envoyée par la Servlet
+     */
 	public void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.getServletContext().getRequestDispatcher("/connexion.jsp").forward(request, response);
 	}
 	
+	/**
+     * Méthode dans le cas d'un accès par la méthode "Post", appel de Connexion(), création d'une session, puis renvoie au menu principal
+     * @param request La requête reçue par la Servlet
+     * @param response La réponse envoyée par la Servlet
+     */
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {	
 		Connexion co = new  Connexion();
 		

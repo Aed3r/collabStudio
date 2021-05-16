@@ -10,11 +10,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Classe héritant de HttpServlet, Servlet qui permet de gérer une liste d'utilisateurs, et d'inscrire des utilisateurs
+ */
 @WebServlet("/Servlet_liste")
 public class Servlet_liste extends HttpServlet {
+	/**
+     * Méthode dans le cas d'un accès par la méthode "Get", récupération de la liste
+     * @param request La requête reçue par la Servlet
+     * @param response La réponse envoyée par la Servlet
+     */
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
-		//String liste;
-		//liste = request.getParameter("listofuser");
 		String liste;
 		liste = request.getParameter("listofuser");
 		request.setAttribute("liste", liste);
@@ -23,8 +29,12 @@ public class Servlet_liste extends HttpServlet {
 		
 	}
 	
+	/**
+     * Méthode dans le cas d'un accès par la méthode "Post", récupération des paramètres de requêtes
+     * @param request La requête reçue par la Servlet
+     * @param response La réponse envoyée par la Servlet
+     */
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
-		//Remplacer par l'ajout dans la base de données
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");
 		String pseudo = request.getParameter("pseudo");
@@ -34,7 +44,6 @@ public class Servlet_liste extends HttpServlet {
 		request.setAttribute("prenom", prenom);
 		request.setAttribute("pseudo", pseudo);
 		request.setAttribute("mdp", mdp);
-		//Remplacer par l'ajout dans la base de données
 		
 		this.getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
 	}
