@@ -1,9 +1,13 @@
 var secondsToShow = 30;
 var nbPistes = 500;
-var xMarker = 2000;
+var xMarker = 0;
 var colLimites = 'darkslategray';
 var colMarqueur = 'crimson';
-var tailleMarqueur = 10; //px
+var tailleMarqueur = 10; // px
+var distanceFadeIn = 100; // px
+var minZoom = 10;
+var maxZoom = 60;
+var fps = 30;
 
 // Crée un nouveau div servant de piste
 function newTrack(id) {
@@ -11,6 +15,7 @@ function newTrack(id) {
 
     template.querySelector(".track").setAttribute("id", "track" + id);
     template.querySelector(".trackID").innerHTML = "Track " + id;
+    template.querySelector(".trackBody").setAttribute("id", "trackBody" + id);
 
     return template;
 }
@@ -30,35 +35,17 @@ var cornerDiv = document.getElementById("corner");
 function drawMeasures() {
     let xScroll = tracks.scrollLeft; // Pixels verticales défilé
     let yScroll = tracks.scrollTop; // Pixels horizontales défilé
-    let oneSecWidth = Math.round(tracksCanvas.width / secondsToShow);
+    let measureWidth = getMeasureWidth();
     let timeKeepHeight = topDiv.clientHeight;
 
     // Activation/désactivation de l'ombre verticale
-    if (xScroll > 0) {
-        // On affiche l'ombre
-        document.querySelectorAll(".trackHeader").forEach(header => {
-            header.style.boxShadow = "10px 0 20px -10px " + colLimites;
-        });
-        cornerDiv.style.boxShadow = "10px 0 20px -10px " + colLimites;
-    } else {
-        // On enlève l'ombre
-        document.querySelectorAll(".trackHeader").forEach(header => {
-            header.style.boxShadow = "";
-        });
-        cornerDiv.style.boxShadow = "";
-    }
+    document.getElementById("ombreH").style.opacity = Math.min(yScroll / distanceFadeIn, 1);
 
     // Activation/désactivation de l'ombre horizontale
-    if (yScroll > 0) {
-        // On affiche l'ombre
-        topDiv.style.boxShadow = "0 10px 20px -10px " + colLimites;
-    } else {
-        // On enlève l'ombre
-        topDiv.style.boxShadow = "";
-    }
+    document.getElementById("ombreV").style.opacity = Math.min(xScroll / distanceFadeIn, 1);
 
     // Dessine les mesures sur les pistes visibles suivant le défilement horizontal
-    var start = oneSecWidth - Math.floor(xScroll % oneSecWidth);
+    var start = measureWidth - Math.floor(xScroll % measureWidth);
 
     let ctx = tracksCanvas.getContext('2d');
     ctx.clearRect(0, 0, tracksCanvas.width, tracksCanvas.height);
@@ -68,13 +55,15 @@ function drawMeasures() {
     ctx.fillStyle = colLimites;
     ctx.font = '10px Open Sans';
 
-    for (let x = start; x < tracksCanvas.width - 20; x += oneSecWidth) {
+    let txtDist = 0;
+
+    for (let x = start; x < tracksCanvas.width - 20; x += measureWidth) {
         // lignes
         ctx.moveTo(x, timeKeepHeight);
         ctx.lineTo(x, tracksCanvas.height);
 
         // temps
-        let sec = Math.round((x + xScroll) / oneSecWidth);
+        let sec = Math.round((x + xScroll) / measureWidth);
         let min = Math.floor(sec / 60);
         sec = Math.round(sec % 60);
 
@@ -85,13 +74,31 @@ function drawMeasures() {
         if (sec < 10) txt += "0";
         txt += sec;
 
-        ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, oneSecWidth);
+        txtDist -= measureWidth;
+
+        if (txtDist < 0) {
+            ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, measureWidth);
+            txtDist += ctx.measureText(txt).width;
+        }
     }
     ctx.stroke();
 
     // On affiche le marqueur
     drawMarker();
 }
+
+/* Redéssine tout après avoir modifié les tailles des éléments */
+function changeZoom() {
+    let percent = document.getElementById("zoomLevel").value;
+    secondsToShow = minZoom + (maxZoom - minZoom) * percent / 100;
+    drawMeasures();
+    document.querySelectorAll(".itemInEditor").forEach(element => {
+        element.style.width = (parseInt(element.dataset.duration) * getMeasureWidth()) + "px";
+        element.style.left = (parseInt(element.dataset.position) * getMeasureWidth()) + "px";
+    });
+}
+
+/* Marqueur de début de lecture */
 
 // Trace le marqueur
 function drawMarker() {
@@ -124,9 +131,16 @@ function drawMarker() {
 
 // Met à jour le marqueur à partir d'un évenement
 function updateMarker(e) {
-    xMarker = e.x + tracks.scrollLeft - cornerDiv.clientWidth;
-    drawMeasures();
+    if (e.srcElement.id == "top") {
+        xMarker = e.layerX + tracks.scrollLeft - cornerDiv.clientWidth;
+        drawMeasures();
+        playTrack(true);
+    }
 }
+
+
+
+document.getElementById("zoomLevel").addEventListener('input', changeZoom, false);
 
 // On place le marqueur au clic simple
 topDiv.addEventListener("click", function(e) {
@@ -147,6 +161,24 @@ document.addEventListener("mousemove", function(e) {
 document.addEventListener("mouseup", function() {
     markerDragged = false;
 }, false);
+
+var timeoutID = null;
+
+// Lance le marqueur de position lors de la lecture
+function lancerMarqueur() {
+    let avance = getMeasureWidth() / fps;
+
+    xMarker += avance;
+    drawMeasures();
+
+    timeoutID = setTimeout(lancerMarqueur, 1000/fps);
+}
+
+function stopMarqueur() {
+    if (timeoutID) clearTimeout(timeoutID);
+}
+
+/* Canvas */
 
 // On initialise la résolution du canvas
 var tracksCanvas = document.getElementById("tracksCanvas");
@@ -181,48 +213,24 @@ initCanvas();
 
 window.addEventListener("resize", initCanvas);
 
-function volSliderMouseDown(elem) {
-    elem.parentNode.dataset.mouseDown = true;
+/* Slider de volume */
+
+function setSliderPos(slider, pos) {
+    let range = slider.parentElement.querySelector(".slider");
+
+    range.value = pos;
 }
 
-function volSliderMouseMove(event, elem) {
-    if (elem.dataset.mouseDown === "true") {
-        let slider = elem.querySelector(".slider");
-        let handle = elem.querySelector(".handle");
-        let pos = event.clientX;
+/* Fonction get / set */
 
-        setSliderPos(slider, handle, elem, pos);
-    }
+function getMeasureWidth() {
+    return Math.round(tracksCanvas.clientWidth / secondsToShow);
 }
 
-function setSliderPos(slider, handle, elem, pos) {
-    let rect = slider.getBoundingClientRect();
-
-    if (pos > rect.x + rect.width - 9) pos = rect.x + rect.width - 9;
-    else if (pos < rect.x) pos = rect.x;
-
-    rect = elem.getBoundingClientRect();
-    pos -= rect.x;
-
-    handle.style.left = pos + "px";
+function getNbPistes() {
+    return nbPistes;
 }
 
-function volSliderMouseUp(elem) {
-    elem.querySelector(".volumeSlider").dataset.mouseDown = false;
-}
-
-function volSliderMute(elem) {
-    let parent = elem.parentNode;
-    let slider = parent.querySelector(".slider");
-    let handle = parent.querySelector(".handle");
-
-    setSliderPos(slider, handle, parent, 0);
-}
-
-function volSliderFull(elem) {
-    let parent = elem.parentNode;
-    let slider = parent.querySelector(".slider");
-    let handle = parent.querySelector(".handle");
-
-    setSliderPos(slider, handle, parent, 1000);
+function getPosMarker() {
+    return xMarker;
 }
