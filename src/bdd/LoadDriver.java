@@ -3,8 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-// Notice, do not import com.mysql.jdbc.*
-// or you will have problems!
+// ssh -L 8081:webetu:3306 am04482t@mira2.univ-st-etienne.fr pour le tunel VPN
 
 public class LoadDriver {
     public static void main(String[] args) {
