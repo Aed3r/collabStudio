@@ -1,12 +1,13 @@
 var secondsToShow = 30;
 var nbPistes = 500;
-var xMarker = 2000;
+var xMarker = 0;
 var colLimites = 'darkslategray';
 var colMarqueur = 'crimson';
 var tailleMarqueur = 10; // px
 var distanceFadeIn = 100; // px
 var minZoom = 10;
 var maxZoom = 60;
+var fps = 30;
 
 // Crée un nouveau div servant de piste
 function newTrack(id) {
@@ -86,6 +87,19 @@ function drawMeasures() {
     drawMarker();
 }
 
+/* Redéssine tout après avoir modifié les tailles des éléments */
+function changeZoom() {
+    let percent = document.getElementById("zoomLevel").value;
+    secondsToShow = minZoom + (maxZoom - minZoom) * percent / 100;
+    drawMeasures();
+    document.querySelectorAll(".itemInEditor").forEach(element => {
+        element.style.width = (parseInt(element.dataset.duration) * getMeasureWidth()) + "px";
+        element.style.left = (parseInt(element.dataset.position) * getMeasureWidth()) + "px";
+    });
+}
+
+/* Marqueur de début de lecture */
+
 // Trace le marqueur
 function drawMarker() {
     let xScroll = tracks.scrollLeft; // Pixels verticales défilé
@@ -120,18 +134,11 @@ function updateMarker(e) {
     if (e.srcElement.id == "top") {
         xMarker = e.layerX + tracks.scrollLeft - cornerDiv.clientWidth;
         drawMeasures();
+        playTrack(true);
     }
 }
 
-function changeZoom() {
-    let percent = document.getElementById("zoomLevel").value;
-    secondsToShow = minZoom + (maxZoom - minZoom) * percent / 100;
-    drawMeasures();
-    document.querySelectorAll(".itemInEditor").forEach(element => {
-        element.style.width = (parseInt(element.dataset.duration) * getMeasureWidth()) + "px";
-        element.style.left = (parseInt(element.dataset.position) * getMeasureWidth()) + "px";
-    });
-}
+
 
 document.getElementById("zoomLevel").addEventListener('input', changeZoom, false);
 
@@ -154,6 +161,24 @@ document.addEventListener("mousemove", function(e) {
 document.addEventListener("mouseup", function() {
     markerDragged = false;
 }, false);
+
+var timeoutID = null;
+
+// Lance le marqueur de position lors de la lecture
+function lancerMarqueur() {
+    let avance = getMeasureWidth() / fps;
+
+    xMarker += avance;
+    drawMeasures();
+
+    timeoutID = setTimeout(lancerMarqueur, 1000/fps);
+}
+
+function stopMarqueur() {
+    if (timeoutID) clearTimeout(timeoutID);
+}
+
+/* Canvas */
 
 // On initialise la résolution du canvas
 var tracksCanvas = document.getElementById("tracksCanvas");
@@ -204,4 +229,8 @@ function getMeasureWidth() {
 
 function getNbPistes() {
     return nbPistes;
+}
+
+function getPosMarker() {
+    return xMarker;
 }

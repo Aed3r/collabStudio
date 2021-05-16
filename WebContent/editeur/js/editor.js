@@ -6,6 +6,7 @@ var tracksFrame = document.getElementById("tracksFrame");
 var track = new LinkedList();
 var tracks = document.getElementById("tracks");
 var sounds = {};
+var playingStatus = "paused";
 
 //tracksFrame.removeAttribute("src");
 //var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
@@ -34,7 +35,6 @@ function soundLoaded(id) {
     item.style.backgroundImage = "none";
     item.querySelector(".itemName").style.visibility = "visible";
     item.dataset.loaded = "true";
-    console.log(sounds[id].duration);
 }
 
 /*
@@ -226,5 +226,93 @@ function editorMouseMove(e) {
         currentlyDragged.style.visibility = "visible";
     } else {
         currentlyDragged.style.visibility = "hidden";
+    }
+}
+
+var currentlyPlaying = [];
+var lastTimeout = null;
+
+// Joue un son de la continuité de sons
+function playSound (node, doContinue, start = 0) {
+    if (playingStatus == "playing") {
+        let clip = sounds[node.data.soundID];
+
+        clip.currentTime = start / 1000;
+
+        clip.play();
+        currentlyPlaying.push(node.data.soundID);
+        setTimeout(function(id) { currentlyPlaying.splice(currentlyPlaying.indexOf(id), 1); }, node.data.length - start, node.data.soundID);
+
+        if (doContinue && node.next) 
+            lastTimeout = setTimeout(playSound, node.next.data.time - node.data.time - start, node.next, true);
+    }
+}
+
+function clearCurrentlyPlaying() {
+    // On arrête les sons en cours de lecture
+    clearTimeout(lastTimeout);
+    currentlyPlaying.forEach(soundID => {
+        sounds[soundID].pause();
+    });
+    currentlyPlaying = [];
+}
+
+// Lance ou pause la lecture suivant la position du marqueur
+function playTrack(markerMoved = false) {
+    if (markerMoved) {
+        if (playingStatus == "playing") {
+            clearCurrentlyPlaying();
+            playingStatus = "paused";
+            stopMarqueur();
+        } else return;
+    }
+
+    switch (playingStatus) {
+        case "paused":
+            let node = track.head;
+            let posMarker = getPosMarker() / getMeasureWidth() * 1000; // Position du marqueur
+            let oldest = null;
+
+            // On change l'état de lecture
+            document.getElementById("playBtn").style.display = "none";
+            document.getElementById("pauseBtn").style.display = "block";
+            playingStatus = "playing";
+            lancerMarqueur();
+
+            // On cherche le première son se trouvant sur le marqueur et on lance ceux se trouvant également dessus
+            while (node) {
+                if (node.data.time < posMarker && node.data.time + node.data.length > posMarker) {
+                    if (oldest == null || oldest.data.time+oldest.data.length < node.data.time+node.data.length) {
+                        if (oldest) playSound(oldest, false, oldest.data.time + oldest.data.length - posMarker);
+                        oldest = node;
+                    } else {
+                        playSound(node, false, node.data.time + node.data.length - posMarker);
+                    }
+                }
+
+                node = node.next;
+            }
+
+            // On lance la chaîne de lecture à partir du premier son à lire
+            if (oldest != null) playSound(oldest, true, oldest.data.time + oldest.data.length - posMarker);
+            else {
+                let next = track.getClosestAfter((x => x.data.time <= posMarker));
+                if (next) setTimeout(playSound, next.data.time - posMarker, next, true);
+            }
+
+            break;
+
+        case "playing":
+            // On change l'état de lecture
+            document.getElementById("playBtn").style.display = "block";
+            document.getElementById("pauseBtn").style.display = "none";
+            playingStatus = "paused";
+            stopMarqueur();
+
+            clearCurrentlyPlaying();
+            break;
+        
+        default:
+            break;
     }
 }

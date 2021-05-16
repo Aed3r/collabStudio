@@ -21,6 +21,11 @@
             </div>
         </template>
 
+        <div id="topDiv">
+            <div id="playBtn" onclick="playTrack()"></div>
+            <div id="pauseBtn" onclick="playTrack()"></div>
+        </div>
+
         <div id="bottomDiv">
             <div id="contentWrap">
                 <span id="selectorSpan">Sélection de contenu</span>
