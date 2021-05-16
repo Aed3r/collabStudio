@@ -5,6 +5,8 @@ var colLimites = 'darkslategray';
 var colMarqueur = 'crimson';
 var tailleMarqueur = 10; // px
 var distanceFadeIn = 100; // px
+var minZoom = 10;
+var maxZoom = 60;
 
 // Crée un nouveau div servant de piste
 function newTrack(id) {
@@ -52,6 +54,8 @@ function drawMeasures() {
     ctx.fillStyle = colLimites;
     ctx.font = '10px Open Sans';
 
+    let txtDist = 0;
+
     for (let x = start; x < tracksCanvas.width - 20; x += measureWidth) {
         // lignes
         ctx.moveTo(x, timeKeepHeight);
@@ -69,7 +73,12 @@ function drawMeasures() {
         if (sec < 10) txt += "0";
         txt += sec;
 
-        ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, measureWidth);
+        txtDist -= measureWidth;
+
+        if (txtDist < 0) {
+            ctx.fillText(txt, x - ctx.measureText(txt).width / 2, timeKeepHeight - 5, measureWidth);
+            txtDist += ctx.measureText(txt).width;
+        }
     }
     ctx.stroke();
 
@@ -113,6 +122,18 @@ function updateMarker(e) {
         drawMeasures();
     }
 }
+
+function changeZoom() {
+    let percent = document.getElementById("zoomLevel").value;
+    secondsToShow = minZoom + (maxZoom - minZoom) * percent / 100;
+    drawMeasures();
+    document.querySelectorAll(".itemInEditor").forEach(element => {
+        element.style.width = (parseInt(element.dataset.duration) * getMeasureWidth()) + "px";
+        element.style.left = (parseInt(element.dataset.position) * getMeasureWidth()) + "px";
+    });
+}
+
+document.getElementById("zoomLevel").addEventListener('input', changeZoom, false);
 
 // On place le marqueur au clic simple
 topDiv.addEventListener("click", function(e) {
@@ -169,58 +190,13 @@ window.addEventListener("resize", initCanvas);
 
 /* Slider de volume */
 
-function volSliderMouseDown(elem) {
-    elem.parentNode.dataset.mouseDown = true;
+function setSliderPos(slider, pos) {
+    let range = slider.parentElement.querySelector(".slider");
+
+    range.value = pos;
 }
 
-function volSliderMouseMove(event, elem) {
-    if (elem.dataset.mouseDown === "true") {
-        let slider = elem.querySelector(".slider");
-        let handle = elem.querySelector(".handle");
-        let pos = event.clientX;
-
-        setSliderPos(slider, handle, elem, pos);
-    }
-}
-
-function setSliderPos(slider, handle, elem, pos) {
-    let rect = slider.getBoundingClientRect();
-
-    if (pos > rect.x + rect.width - 9) pos = rect.x + rect.width - 9;
-    else if (pos < rect.x) pos = rect.x;
-
-    rect = elem.getBoundingClientRect();
-    pos -= rect.x;
-
-    handle.style.left = pos + "px";
-}
-
-function volSliderMouseUp(elem) {
-    elem.querySelector(".volumeSlider").dataset.mouseDown = false;
-}
-
-function volSliderMute(elem) {
-    let parent = elem.parentNode;
-    let slider = parent.querySelector(".slider");
-    let handle = parent.querySelector(".handle");
-
-    setSliderPos(slider, handle, parent, 0);
-}
-
-function volSliderFull(elem) {
-    let parent = elem.parentNode;
-    let slider = parent.querySelector(".slider");
-    let handle = parent.querySelector(".handle");
-
-    setSliderPos(slider, handle, parent, 1000);
-}
-
-function volSliderSet(event, elem) {
-    let parent = elem.parentNode;
-    let handle = parent.querySelector(".handle");
-
-    setSliderPos(elem, handle, parent, event.clientX);
-}
+/* Fonction get / set */
 
 function getMeasureWidth() {
     return Math.round(tracksCanvas.clientWidth / secondsToShow);

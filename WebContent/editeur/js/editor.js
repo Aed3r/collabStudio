@@ -5,6 +5,7 @@ var itemCounter = 0;
 var tracksFrame = document.getElementById("tracksFrame");
 var track = new LinkedList();
 var tracks = document.getElementById("tracks");
+var sounds = {};
 
 //tracksFrame.removeAttribute("src");
 //var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
@@ -13,17 +14,33 @@ function newItem(id, title) {
     let template = itemTemplate.cloneNode(true);
     let item = template.querySelector(".soundItem");
     let itemSpan = item.querySelector(".itemName");
+    let itemID = "item" + id;
 
-    item.setAttribute("id", "item" + id);
+    item.setAttribute("id", itemID);
     item.style.backgroundColor = "#" + itemColors[(itemCounter++) % itemColors.length];
     itemSpan.innerHTML = title;
+    item.dataset.loaded = "false";
+
+    selector.appendChild(template);
+    let newSound = new Audio("/collabStudio/sounds/" + id);
+    sounds[itemID] = newSound;
+    newSound.addEventListener("canplaythrough", soundLoaded(itemID));
 
     return template;
 }
 
-for (let i = 1; i <= 50; i++) {
-    selector.appendChild(newItem(i, "Item " + i));
+function soundLoaded(id) {
+    let item = document.getElementById(id);
+    item.style.backgroundImage = "none";
+    item.querySelector(".itemName").style.visibility = "visible";
+    item.dataset.loaded = "true";
+    console.log(sounds[id].duration);
 }
+
+/*
+for (let i = 1; i <= 50; i++) {
+    newItem(i, "Item " + i);
+}*/
 
 var selected = null;
 
@@ -52,6 +69,18 @@ function selectItem(elem) {
     // On selectionne le nouvel item
     selected = elem.id;
     elem.style.boxShadow = "0px 0px 4px 4px " + elem.style.backgroundColor;
+
+    // Si le son est chargé on le li une fois
+    if (elem.dataset.loaded == "true") {
+        let prog = elem.querySelector(".progression");
+        prog.style.transition = "width " + sounds[elem.id].duration + "s linear";
+        prog.ontransitionend = () => {
+            prog.style.transition = "none";
+            elem.classList.remove("activated");
+        };
+        elem.classList.add("activated");
+        sounds[elem.id].play();
+    }
 }
 
 var currentlyDragged = null;
@@ -96,7 +125,7 @@ function putItem(e) {
     // On trouve la mesure la plus proche
     let time = Math.floor(e.layerX / getMeasureWidth()) * 1000;
     let trackID = e.currentTarget.id;
-    let length = 2000;
+    let length = sounds[selected].duration * 1000;
 
     // On vérifie qu'il n'y est pas de dépassement sur d'autres sons du track
     if (!checkPlacement(time, length, trackID)) return;
@@ -133,10 +162,12 @@ function addSound(node) {
     let track1 = document.getElementById("track1");
 
     soundDiv.id = node.id;
-    soundDiv.style.width = (node.data.length / 1000 * getMeasureWidth()) + "px"; // TODO: à changer
+    soundDiv.style.width = (node.data.length / 1000 * getMeasureWidth()) + "px";
+    soundDiv.dataset.duration = (node.data.length / 1000) + "";
     soundDiv.style.left = (node.data.time / 1000 * getMeasureWidth()) + "px";
+    soundDiv.dataset.position = (node.data.time / 1000) + "";
     soundDiv.style.height = (track1.clientHeight - 2) + "px";
-    soundDiv.style.backgroundColor = "red"; // TODO: à changer
+    soundDiv.style.backgroundColor = document.getElementById(node.data.soundID).style.backgroundColor;
     soundDiv.classList.add("itemInEditor");
     soundDiv.setAttribute("onmousedown", "editorSoundMouseDown(this, event)");
     soundDiv.setAttribute("onmouseup", "editorSoundMouseUp(this, event)");

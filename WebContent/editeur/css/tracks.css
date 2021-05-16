@@ -91,31 +91,48 @@ body {
     height: 10px;
     display: block;
     cursor: pointer;
+    background-repeat: no-repeat;
 }
 
-.volumeSlider .slider {
+input[type="range"] {
+    height: 25px;
+    -webkit-appearance: none;
+    margin: 10px 0;
+    width: 100%;
+    background: transparent;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track,
+input[type="range"]::-moz-range-track {
     width: calc(100% - 20px);
-    height: 2px;
-    border-radius: 15px;
-    background-color: black;
-    margin-right: 3px;
-    margin-left: 1px;
-    transition: height ease 0.1s;
-    cursor: pointer;
-}
-
-.volumeSlider:hover .slider {
     height: 3px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: black;
+    border-radius: 10px;
+    border: 0px solid #000000;
 }
 
-.volumeSlider .handle {
-    width: 10px;
+input[type="range"]::-webkit-slider-thumb,
+input[type="range"]::-moz-range-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 1px solid black;
     height: 10px;
-    border-radius: 5px;
-    background-color: black;
-    position: absolute;
-    right: 10px;
-    cursor: grab;
+    width: 10px;
+    border-radius: 25px;
+    background: darkslategray;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -7px;
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+    background: gray;
 }
 
 .volumeSlider .volHighIcon {
@@ -124,6 +141,7 @@ body {
     height: 10px;
     display: block;
     cursor: pointer;
+    background-repeat: no-repeat;
 }
 
 #ombreH {
@@ -158,4 +176,23 @@ body {
     border-radius: 5px;
     z-index: 3;
     cursor: grab;
+}
+
+#zoomLevel {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    z-index: 4;
+    width: 10%;
+}
+
+#zoomIcon {
+    background-image: url("data/img/zoom-in.svg");
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    right: calc(5px + 10%);
+    position: absolute;
+    bottom: 15px;
 }

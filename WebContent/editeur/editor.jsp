@@ -15,16 +15,19 @@
         <!-- TODO: include header -->
 
         <template id="item-template">
-        <div class="soundItem" onclick="selectItem(this)">
-            <span class="itemName"></span>
-        </div>
-    </template>
+            <div class="soundItem" onclick="selectItem(this)">
+                <span class="itemName"></span>
+                <div class="progression"></div>
+            </div>
+        </template>
 
         <div id="bottomDiv">
             <div id="contentWrap">
                 <span id="selectorSpan">Sélection de contenu</span>
                 <div id="contentSelector"></div>
-                <div id="soundAdder" onclick="addSoundItem()">&nbsp;</div>
+                <div id="fileUploadMask">
+                    <input type="file" id="soundAdder" multiple="true" onchange="fileUpload(this)" />
+                </div>
             </div>
 
             <div id="tracksFrame">
@@ -32,6 +35,7 @@
             </div>
         </div>
 
+        <script src="js/network.js"></script>
         <script src="js/linkedList.js"></script>
         <script src="js/editor.js"></script>
     </body>
