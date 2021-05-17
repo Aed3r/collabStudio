@@ -101,13 +101,21 @@ function putItem(e) {
             currentlyDragged.style.visibility = "visible";
         }
 
+        let pos = null;
+        if (e.target.className != "trackBody") pos = e.target.offsetLeft + e.layerX - dragMouseOffset;
+        else pos = e.layerX - dragMouseOffset;
+
         // On réajoute le son dans track
-        track.insert(draggedOGNode.id, {
-            time: (e.layerX / getMeasureWidth() * 1000),
+        let newNode = track.insert(draggedOGNode.id, {
+            time: (pos / getMeasureWidth() * 1000),
             trackID: draggedOGNode.data.trackID,
             soundID: draggedOGNode.data.soundID,
             length: draggedOGNode.data.length
         }, compSons);
+
+        // On envoi aux autres utilisateurs
+        sendChange("removeSound", draggedOGNode);
+        sendChange("addSound", newNode);
 
         // On réinitialise les valeurs temporaires  
         currentlyDragged.classList.remove("ghost");
@@ -136,7 +144,12 @@ function putItem(e) {
         soundID: selected,
         length: length
     }, compSons);
+
+    // On ajoute le clip dans l'éditeur
     addSound(node);
+
+    // On envoi aux autres utilisateurs
+    sendChange("addSound", node);
 }
 
 function compSons(node, newNode) {
@@ -189,6 +202,9 @@ function addTrack() {
 
 function editorSoundMouseUp(soundDiv, e) {
     if (e.which == 3) {
+        // On envoi aux autres utilisateurs
+        sendChange("removeSound", track.get(soundDiv.id));
+
         track.remove(soundDiv.id);
         soundDiv.parentElement.removeChild(soundDiv);
     }
@@ -316,3 +332,58 @@ function playTrack(markerMoved = false) {
             break;
     }
 }
+
+document.addEventListener('keyup', (e) => {
+    if (e.code === "Space") playTrack();
+});
+
+/* Messagerie */
+
+var unread = 0;
+
+function toggleMessagerie() {
+    let messagerie = document.getElementById("messagerie");
+
+    if (!messagerie.dataset.expanded || messagerie.dataset.expanded == "false") {
+        messagerie.dataset.expanded = "true";
+        messagerie.style.top = "70%";
+        document.getElementById("msgrHeader").innerHTML = "Messagerie";
+        unread = 0;
+    } else {
+        messagerie.dataset.expanded = "false";
+        messagerie.style.top = "97%";
+    }
+}
+
+function envoyerMsg() {
+    let entree = document.getElementById("entreeMsg");
+    let msg = entree.value.trim();
+
+    if (msg != "") {
+        sendMsg(msg);
+        afficherMsg(msg);
+        entree.value = "";
+    }
+}
+
+function afficherMsg (msg) {
+    let affichageMsg = document.getElementById("affichageMsg");
+    let messagerie = document.getElementById("messagerie");
+    let currentDate = new Date();
+
+    affichageMsg.innerHTML += "<b>[" + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds() + "]</b> " + msg + "<br>";
+
+    if (!messagerie.dataset.expanded || messagerie.dataset.expanded == "false") {
+        unread++;
+        document.getElementById("msgrHeader").innerHTML = "Messagerie (" + unread + ")";
+    }
+}
+
+let input = document.getElementById("entreeMsg");
+
+input.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("envoyerMsg").click();
+  }
+}); 

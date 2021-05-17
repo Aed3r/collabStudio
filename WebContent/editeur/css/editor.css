@@ -20,7 +20,7 @@
     background-image: url("data/img/053-play.svg");
     background-size: 60px auto;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: 25px center;
 }
 
 #pauseBtn {
@@ -153,3 +153,58 @@
     opacity: 0;
     cursor: pointer;
 }
+
+#messagerie {
+    width: 13%;
+    height: 35%;
+    position: absolute;
+    right: 2%;
+    top: 97%;
+    border-radius: 10px;
+    border: solid 1px darkslategray;
+    background-color: beige;
+    z-index: 6;
+    transition: top ease 1s;
+}
+
+#messagerie #msgrHeader {
+    height: 10%;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    background-image: url("data/img/conversation.svg");
+    background-repeat: no-repeat;
+    background-size: 7% auto;
+    background-position: 20% 3px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    cursor: pointer;
+}
+
+#affichageMsg {
+    height: 63%;
+    overflow: auto;
+    word-wrap: break-word;
+}
+
+#saisie {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#entreeMsg {
+    flex-grow: 2;
+    margin-left: 5px;
+    border-radius: 5px; 
+    margin-right: 3px;
+}
+
+#envoyerMsg {
+    flex-grow: 1;
+    font-family: 'Open Sans', sans-serif;
+    margin-right: 3px;
+    border-radius: 5px;
+} 

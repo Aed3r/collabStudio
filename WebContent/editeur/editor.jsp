@@ -40,6 +40,15 @@
             </div>
         </div>
 
+        <div id="messagerie">
+            <span id="msgrHeader" onclick="toggleMessagerie()">Messagerie</span>
+            <div id="affichageMsg"></div>
+            <div id="saisie">
+                <input type="text" id="entreeMsg" />
+                <input type="button" id="envoyerMsg" value="Envoyer" onclick="envoyerMsg()"/>
+            </div>
+        </div>
+
         <script src="js/network.js"></script>
         <script src="js/linkedList.js"></script>
         <script src="js/editor.js"></script>
