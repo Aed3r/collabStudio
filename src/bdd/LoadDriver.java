@@ -18,16 +18,15 @@ public class LoadDriver {
     int nbLignes;
     
     public LoadDriver() {
-        try {
-			Class.forName(driver);
-			System.out.println("Driver ok!");
-		} catch (ClassNotFoundException e) {
-			System.err.println("Problème de driver! " + e.getMessage());
-            System.exit(0);
-		}
+    	try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            System.out.println("Instance créée");
+        } catch (Exception ex) {
+            // handle the error
+        	System.out.println(ex);
+        }
 
         try {
-            System.out.println("Tets!");
             c = DriverManager.getConnection(url, id, pwd);
             System.out.println("Connexion ok!");
 
