@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import bdd.LoadDriver;
 
 /**
  * Classe héritant de HttpServlet, Servlet qui permet de gérer une liste d'utilisateurs, et d'inscrire des utilisateurs
@@ -44,6 +45,10 @@ public class Servlet_liste extends HttpServlet {
 		request.setAttribute("prenom", prenom);
 		request.setAttribute("pseudo", pseudo);
 		request.setAttribute("mdp", mdp);
+		
+		//Le mettre dans la base de donnée
+		LoadDriver d = new LoadDriver();
+		d.reqSQL("INSERT INTO Utilisateurs(pseudo, mot_de_passe, nom, prenom) VALUES (" + pseudo +","+ mdp +","+ nom +", "+ prenom+ ");", 's');
 		
 		this.getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
 	}

@@ -1,40 +1,76 @@
 package bdd;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-// ssh -L 8081:webetu:3306 am04482t@mira2.univ-st-etienne.fr pour le tunel VPN
+import java.sql.*;
 
 /**
  * Classe qui charge le Driver et se Connecte a la base de donnée
  */
 public class LoadDriver {
-    public static void main(String[] args) {
-        try {
-            /*On crée une instance du driver pour pouvoir se connecter a la BDD distante*/
-            Class.forName("com.mysql.jdbc.Driver").getDeclaredConstructor().newInstance();
-            System.out.println("Instance créée");
-        } catch (Exception ex) {
-            // handle the error
-        	System.out.println(ex);
-        }
-        
-        Connection conn = null;
-        try {
-            /*On se connecte ensuite a la bdd distante grace au tunnel ssh*/
-            conn =
-               DriverManager.getConnection("jdbc:mysql://localhost:8081/am04482t",
-                                           "am04482t", "HQR2DFBY");
+	private final String driver = "com.mysql.jdbc.Driver";
+    private final String serverName = "localhost";
+    private final String mydatabase = "mydb";
+    private final String url = "jdbc:mysql://" + serverName + "/" + mydatabase; 
+    private final String id = "root";
+    private final String pwd = "DragonBall74";
 
-            // Do something with the Connection
-        } catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+    Connection c = null;
+    Statement s;
+    ResultSet r = null;
+    int nbLignes;
+    
+    public LoadDriver() {
+        try {
+			Class.forName(driver);
+			System.out.println("Driver ok!");
+		} catch (ClassNotFoundException e) {
+			System.err.println("Problème de driver! " + e.getMessage());
+            System.exit(0);
+		}
+
+        try {
+            System.out.println("Tets!");
+            c = DriverManager.getConnection(url, id, pwd);
+            System.out.println("Connexion ok!");
+
+            try {
+                s = c.createStatement();
+                System.out.println("Création statement ok!");
+            } catch (SQLException e) { 
+                System.out.println("Probleme de création de statement: " + e.getLocalizedMessage()); 
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            System.err.println("Probleme de connexion! " + e.getLocalizedMessage());
+            System.exit(0);
         }
-        
-        
-        System.out.println("Fin");
+    }
+    
+    public void close () {
+        try {
+            s.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println("Probleme de fermeture de la connexion! " + e.getLocalizedMessage());
+            System.exit(0);
+        }
+    }
+
+    public boolean reqSQL (String query, char type) {
+        if (type == 'm') {
+            try {
+                nbLignes = s.executeUpdate(query);
+                return true;
+            } catch (SQLException e) {
+                System.out.println("Probleme lors de l'éxecution de la update \"" + query + "\": " + e.getLocalizedMessage());
+                return false;
+            }
+        } else if (type == 's') {
+            try {
+                r = s.executeQuery(query);
+                return true;
+            } catch (SQLException e) {
+                System.out.println("Probleme lors de l'éxecution de la query \"" + query + "\": " + e.getLocalizedMessage());
+                return false;
+            }
+        } else return false;
     }
 }
