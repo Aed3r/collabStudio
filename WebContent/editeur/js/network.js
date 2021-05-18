@@ -33,7 +33,12 @@ function connectToWebsocket() {
                 break;
 
             case "loadTrack":
-                loadTrack(m.track);
+                prepareNewTrack(m.track);
+                if (soundsLoaded) loadTrack();
+                break;
+
+            case "loadSounds":
+                loadSounds(m.sounds);
                 break;
 
             default:
@@ -86,6 +91,12 @@ function sendTrack(track, projectID, userName) {
 
 function newProject(nom) {
     let packet = {"action": "newProject", "nom": nom};
+
+    ws.send(JSON.stringify(packet));
+}
+
+function requestData(projectID, userID) {
+    let packet = {"action": "requestData", "project": projectID, "username": userID};
 
     ws.send(JSON.stringify(packet));
 }

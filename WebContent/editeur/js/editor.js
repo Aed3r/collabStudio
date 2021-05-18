@@ -23,6 +23,9 @@ userName = document.getElementById("nomUtilisateur").textContent;
 
 if(userName == "") document.location.pathname = '/collabStudio';
 
+// On récupère les données du projet
+requestData(projectName, userName);
+
 
 function newItem(id, title) {
     let template = itemTemplate.cloneNode(true);
@@ -410,16 +413,33 @@ function enregistrer() {
     sendTrack(track, projectName, userName);
 }
 
-function loadTrack(newTrack) {
-    track = newTrack;
+var soundsLoaded = false;
+var trackToLoad = null;
+
+function prepareNewTrack(newTrack) {
+    trackToLoad = newTrack;
+}
+
+function loadTrack() {
+    track = trackToLoad;
     let node = track.head;
 
     while (node) {
         addSound(node);
         node = node.next;
     }
+    trackToLoad = null;
 }
 
 function getProjectName() {
     return projectName;
+}
+
+function loadSounds (sounds) {
+    sounds.forEach(sound => {
+        newItem(sound.soundID, sound.title);
+    });
+
+    soundsLoaded = true;
+    if (trackToLoad) loadTrack();
 }

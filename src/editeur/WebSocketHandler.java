@@ -65,6 +65,11 @@ public class WebSocketHandler {
 				String nom = (String) json.get("nom");
 				// Enregistrer dans db
 				break;
+			case "requestData":
+				String projectID = (String) json.get("project");
+				String userName = (String) json.get("username");
+				// Envoyer sons
+				// Envoyer track
 			default:
 				for (Session s : sessions) {
 					if (s != session) {
