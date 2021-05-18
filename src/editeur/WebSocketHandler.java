@@ -37,6 +37,20 @@ public class WebSocketHandler {
 		System.err.println(t.getMessage());
 	}
 	
+	@OnMessage
+	public void onMessage(Session session, String message) {
+		for (Session s : sessions) {
+			if (s != session) {
+				try {
+					s.getBasicRemote().sendText(message);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	static void sendNewFilesUpdate (List<List<String>> newFiles) {	
 		String res = "{\"action\":\"newFiles\", \"data\":[";
 		int i;

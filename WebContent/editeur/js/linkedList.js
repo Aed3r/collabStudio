@@ -67,9 +67,14 @@ class LinkedList {
 
             if (last == null) this.head = newNode;
             else last.next = newNode;
-        } else this.getLast().next = newNode;
+        } else { 
+            if (this.head)
+                this.getLast().next = newNode;
+            else
+                this.head = newNode;
+        }
 
-        return newNode
+        return newNode;
     }
 
     // Affiche la liste dans la console

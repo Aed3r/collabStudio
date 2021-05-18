@@ -1,5 +1,8 @@
+var ws = null;
+
 function connectToWebsocket() {
-    let ws = new WebSocket(document.location.origin.replace(/^http(.*)/, "ws$1") + "/collabStudio/wsHandler");
+    let node = null;
+    ws = new WebSocket(document.location.origin.replace(/^http(.*)/, "ws$1") + "/collabStudio/wsHandler");
 
     ws.onopen = function() {};
     ws.onclose = function() {};
@@ -11,6 +14,22 @@ function connectToWebsocket() {
                 m.data.forEach(file => {
                     newItem(file[0], file[1]);
                 });
+                break;
+
+            case "addSound":
+                node = m.node;
+                track.insert(node.id, node.data, compSons);
+                addSound(node);
+                break;
+
+            case "removeSound":
+                node = m.node;
+                track.remove(node.id);
+                document.getElementById(node.data.trackID).removeChild(document.getElementById(node.id));
+                break;
+
+            case "msg":
+                afficherMsg(m.msg);
                 break;
 
             default:
@@ -42,4 +61,16 @@ async function fileUpload(elem) {
     } catch (e) {
         document.getElementById("fileUploadMask").style.backgroundImage = "url(data/img/close.svg)";
     }
+}
+
+function sendChange(action, node) {
+    let packet = {"action": action, "node": node};
+
+    ws.send(JSON.stringify(packet));
+}
+
+function sendMsg(msg) {
+    let packet = {"action": "msg", "msg": msg};
+
+    ws.send(JSON.stringify(packet));
 }
