@@ -58,6 +58,7 @@ public class WebSocketHandler {
 			case "saveTrack":
 				String track = (String) json.get("track");
 				String projectID = (String) json.get("projectID");
+				String userName = (String) json.get("userName");
 				// Enregistrer dans db
 				break;
 			case "newProject":

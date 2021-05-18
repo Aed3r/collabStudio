@@ -78,8 +78,8 @@ function sendMsg(msg) {
     ws.send(JSON.stringify(packet));
 }
 
-function sendTrack(track, projectID) {
-    let packet = {"action": "saveTrack", "track": JSON.stringify(track), "projectID": projectID};
+function sendTrack(track, projectID, userName) {
+    let packet = {"action": "saveTrack", "track": JSON.stringify(track), "projectID": projectID, "userName": userName};
 
     ws.send(JSON.stringify(packet));
 }

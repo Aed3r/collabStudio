@@ -236,3 +236,7 @@ body {
     margin-right: 3px;
     border-radius: 5px;
 } 
+
+#nomUtilisateur {
+    display: none;
+}
