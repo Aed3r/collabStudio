@@ -62,9 +62,9 @@ public class WebSocketHandler {
 				String track = (String) json.get("track");
 				String projectID = (String) json.get("projectID");
 				//On enregistre dans la DB
-				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";"))
+				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";")) {
 					System.out.println("Inscription réussie");
-				}else {
+				} else {
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
@@ -81,6 +81,7 @@ public class WebSocketHandler {
 					uid = res.getInt("id");
 				} catch (SQLException e1) {
 					e1.printStackTrace();
+					return;
 				}
 
 
@@ -92,8 +93,8 @@ public class WebSocketHandler {
 				d.close();
 				break;
 			case "requestData":
-				String projectID = (String) json.get("project");
-				String userName = (String) json.get("username");
+				String projectName = (String) json.get("project");
+				String user = (String) json.get("username");
 				// Envoyer sons
 				// Envoyer track
 			default:

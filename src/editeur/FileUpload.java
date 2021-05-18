@@ -64,27 +64,29 @@ public class FileUpload extends HttpServlet {
 			LoadDriver d = new LoadDriver();
 
 
-			if(d.upSQL("INSERT INTO sons(son) VALUES (\""+destination.name+"\");"))
+			if(d.upSQL("INSERT INTO sons(son) VALUES (\""+destination.getName()+"\");")) {
 				System.out.println("INSERTION OK");
-			}else {
+			} else {
 				System.out.println("Problème requete INSERT SON");
 			}
 
 
-			ResultSet res = d.reqSQL("SELECT id FROM sons WHERE son =\"" + destination.name + "\"");
+			ResultSet res = d.reqSQL("SELECT id FROM sons WHERE son =\"" + destination.getName() + "\"");
+			int id;
 			try {
 				res.next();
-				int id = res.getInt("id");
+				id = res.getInt("id");
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+				return;
 			}
 
 
 
-			if(d.upSQL("INSERT INTO musique_sons(musique_id, son_id) VALUES (\""+projectID+"\",\"" + id + "\");"))
+			if(d.upSQL("INSERT INTO musique_sons(musique_id, son_id) VALUES (\""+projectID+"\",\"" + id + "\");")) {
 				System.out.println("LINK REUSSI");
-			}else {
+			} else {
 				System.out.println("Problème requete INSERT MUSIQUE_SON");
 			}
 

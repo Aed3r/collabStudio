@@ -7,10 +7,10 @@ import java.sql.*;
 public class LoadDriver {
 	private final String driver = "com.mysql.jdbc.Driver";
     private final String serverName = "localhost";
-    private final String mydatabase = "METTRE DATABASE";
+    private final String mydatabase = "collabStudio";
     private final String url = "jdbc:mysql://" + serverName + "/" + mydatabase; 
-    private final String id = "ID";
-    private final String pwd = "MDPMDP";
+    private final String id = "admin";
+    private final String pwd = "scotty2206";
 
     Connection c = null;
     Statement s;
