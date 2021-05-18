@@ -34,7 +34,7 @@ public class Connexion {
 		//if user est dans la base de donnée
 		//On vérifie que l'utilisateur existe
 		LoadDriver d = new LoadDriver();
-		ResultSet res = d.reqSQL("SELECT pseudo, mot_de_passe FROM Utilisateurs WHERE pseudo=\"" + user.getPseudo() + "\" AND nom=\""+ user.getMdp() + "\";");
+		ResultSet res = d.reqSQL("SELECT pseudo, mot_de_passe FROM Utilisateurs WHERE pseudo=\"" + user.getPseudo() + "\" AND mot_de_passe=\""+ user.getMdp() + "\";");
 		
 		try {
 			if(res.getString("pseudo") == pseudo && res.getString("mot_de_passe") == mdp) {
