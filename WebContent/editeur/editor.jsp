@@ -12,7 +12,7 @@
     </head>
 
     <body>
-        <!-- TODO: include header -->
+        <%@ include file = "header.html" %>
 
         <template id="item-template">
             <div class="soundItem" onclick="selectItem(this)">
@@ -21,31 +21,30 @@
             </div>
         </template>
 
-        <div id="topDiv">
-            <div id="playBtn" onclick="playTrack()"></div>
-            <div id="pauseBtn" onclick="playTrack()"></div>
-        </div>
-
-        <div id="bottomDiv">
-            <div id="contentWrap">
-                <span id="selectorSpan">Sélection de contenu</span>
-                <div id="contentSelector"></div>
-                <div id="fileUploadMask">
-                    <input type="file" id="soundAdder" multiple="true" onchange="fileUpload(this)" />
+        <div id="mainDiv">
+            <div id="leftDiv">
+                <div id="playBtn" onclick="playTrack()"></div>
+                <div id="pauseBtn" onclick="playTrack()"></div>
+                <div id="contentWrap">
+                    <span id="selectorSpan">Sélection de contenu</span>
+                    <div id="contentSelector"></div>
+                    <div id="fileUploadMask">
+                        <input type="file" id="soundAdder" multiple="true" onchange="fileUpload(this)" />
+                    </div>
                 </div>
             </div>
 
             <div id="tracksFrame">
                 <%@ include file = "tracks.html" %>
             </div>
-        </div>
 
-        <div id="messagerie">
-            <span id="msgrHeader" onclick="toggleMessagerie()">Messagerie</span>
-            <div id="affichageMsg"></div>
-            <div id="saisie">
-                <input type="text" id="entreeMsg" />
-                <input type="button" id="envoyerMsg" value="Envoyer" onclick="envoyerMsg()"/>
+            <div id="messagerie">
+                <span id="msgrHeader" onclick="toggleMessagerie()">Messagerie</span>
+                <div id="affichageMsg"></div>
+                <div id="saisie">
+                    <input type="text" id="entreeMsg" />
+                    <input type="button" id="envoyerMsg" value="Envoyer" onclick="envoyerMsg()"/>
+                </div>
             </div>
         </div>
 

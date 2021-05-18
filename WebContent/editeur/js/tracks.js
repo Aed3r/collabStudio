@@ -93,8 +93,8 @@ function changeZoom() {
     secondsToShow = minZoom + (maxZoom - minZoom) * percent / 100;
     drawMeasures();
     document.querySelectorAll(".itemInEditor").forEach(element => {
-        element.style.width = (parseInt(element.dataset.duration) * getMeasureWidth()) + "px";
-        element.style.left = (parseInt(element.dataset.position) * getMeasureWidth()) + "px";
+        element.style.width = (parseInt(element.dataset.duration * getMeasureWidth())) + "px";
+        element.style.left = (parseInt(element.dataset.position * getMeasureWidth())) + "px";
     });
 }
 
@@ -133,6 +133,7 @@ function drawMarker() {
 function updateMarker(e) {
     if (e.srcElement.id == "top") {
         xMarker = e.layerX + tracks.scrollLeft - cornerDiv.clientWidth;
+        if (xMarker < 0) xMarker = 0;
         drawMeasures();
         playTrack(true);
     }
@@ -163,19 +164,43 @@ document.addEventListener("mouseup", function() {
 }, false);
 
 var timeoutID = null;
+var correctionTimeoutID = null;
+var correctionStarted = false;
+var startingTime = null;
+var correction = null;
 
 // Lance le marqueur de position lors de la lecture
 function lancerMarqueur() {
     let avance = getMeasureWidth() / fps;
 
-    xMarker += avance;
-    drawMeasures();
+    if (correction) avance += correction;
+
+    if(!correctionStarted) {
+        correctionStarted = true;
+        setTimeout(correctMarker, 1000);
+        startingTime = xMarker;
+    }
 
     timeoutID = setTimeout(lancerMarqueur, 1000/fps);
+
+    xMarker += avance;
+    drawMeasures();
+}
+
+function correctMarker() {
+    if (correctionStarted) {
+        startingTime += getMeasureWidth();
+        correction = (startingTime - xMarker) / fps;
+        xMarker = startingTime;
+        correctionTimeoutID = setTimeout(correctMarker, 1000);
+    }
 }
 
 function stopMarqueur() {
     if (timeoutID) clearTimeout(timeoutID);
+    if (correctionTimeoutID) clearTimeout(correctionTimeoutID);
+    correctionStarted = false;
+    correction = null;
 }
 
 /* Canvas */

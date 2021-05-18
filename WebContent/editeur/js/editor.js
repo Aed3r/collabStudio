@@ -6,6 +6,7 @@ var tracksFrame = document.getElementById("tracksFrame");
 var track = new LinkedList();
 var tracks = document.getElementById("tracks");
 var sounds = {};
+var soundTitles = {};
 var playingStatus = "paused";
 
 //tracksFrame.removeAttribute("src");
@@ -25,6 +26,7 @@ function newItem(id, title) {
     selector.appendChild(template);
     let newSound = new Audio("/collabStudio/sounds/" + id);
     sounds[itemID] = newSound;
+    soundTitles[itemID] = title;
     newSound.addEventListener("canplaythrough", soundLoaded(itemID));
 
     return template;
@@ -108,7 +110,7 @@ function putItem(e) {
         // On réajoute le son dans track
         let newNode = track.insert(draggedOGNode.id, {
             time: (pos / getMeasureWidth() * 1000),
-            trackID: draggedOGNode.data.trackID,
+            trackID: e.currentTarget.id,
             soundID: draggedOGNode.data.soundID,
             length: draggedOGNode.data.length
         }, compSons);
@@ -173,8 +175,12 @@ function addSound(node) {
     let destTrack = document.getElementById(node.data.trackID);
     let soundDiv = document.createElement("div");
     let track1 = document.getElementById("track1");
+    let lbl = document.createElement("span");
 
     soundDiv.id = node.id;
+    lbl.innerHTML = soundTitles[node.data.soundID];
+    lbl.classList.add("itemName");
+    soundDiv.appendChild(lbl);
     soundDiv.style.width = (node.data.length / 1000 * getMeasureWidth()) + "px";
     soundDiv.dataset.duration = (node.data.length / 1000) + "";
     soundDiv.style.left = (node.data.time / 1000 * getMeasureWidth()) + "px";
@@ -346,12 +352,12 @@ function toggleMessagerie() {
 
     if (!messagerie.dataset.expanded || messagerie.dataset.expanded == "false") {
         messagerie.dataset.expanded = "true";
-        messagerie.style.top = "70%";
+        messagerie.style.top = "74%";
         document.getElementById("msgrHeader").innerHTML = "Messagerie";
         unread = 0;
     } else {
         messagerie.dataset.expanded = "false";
-        messagerie.style.top = "97%";
+        messagerie.style.top = "100%";
     }
 }
 
