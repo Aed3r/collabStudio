@@ -57,11 +57,27 @@ public class WebSocketHandler {
 		switch((String) json.get("action")) {
 			case "saveTrack":
 				String track = (String) json.get("track");
-				// Enregistrer dans db
+				//On enregistre dans la DB
+				LoadDriver d = new LoadDriver();
+				
+				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=;"))
+					System.out.println("Inscription réussie");
+				}else {
+					System.out.println("Problème requete inscription");
+				}
+				d.close();
 				break;
 			case "newProject":
 				String nom = (String) json.get("nom");
 				// Enregistrer dans db
+				LoadDriver d = new LoadDriver();
+				
+				if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");"))
+					System.out.println("Inscription réussie");
+				}else {
+					System.out.println("Problème requete inscription");
+				}
+				d.close();
 				break;
 			default:
 				for (Session s : sessions) {
