@@ -48,8 +48,13 @@ public class Servlet_liste extends HttpServlet {
 		
 		//Le mettre dans la base de donnée
 		LoadDriver d = new LoadDriver();
-		d.reqSQL("INSERT INTO Utilisateurs(pseudo, mot_de_passe, nom, prenom) VALUES (" + pseudo +","+ mdp +","+ nom +", "+ prenom+ ");", 's');
+		if(d.reqSQL("INSERT INTO Utilisateurs(pseudo, mot_de_passe, nom, prenom) VALUES (" + pseudo +","+ mdp +","+ nom +", "+ prenom+ ");", 's')) {
+			System.out.println("Inscription réussie");
+		}else {
+			System.out.println("Problème requete inscription");
+		}
 		
+		d.close();
 		this.getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
 	}
 }
