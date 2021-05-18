@@ -35,6 +35,10 @@ public class Servlet_Connexion extends HttpServlet {
 		//on récupère l'utilisateur renvoyé par Connexion.java
 		utilisateurs user = co.connect(request);
 		
+		if(user.getNom() == "-1") {
+			this.getServletContext().getRequestDispatcher("/connexion.jsp#erreur").forward(request, response);
+		}
+		
 		//on crée une session pour l'utilisateur
 		HttpSession session = request.getSession();
 		session.setAttribute("sessionU", user);
