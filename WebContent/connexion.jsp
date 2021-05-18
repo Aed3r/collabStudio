@@ -4,32 +4,31 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
         <title>Connexion</title>
-        <link type="text/css" rel="stylesheet" href="form.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles/connexion.css">
+        <script src="script/connexion.js" async defer></script>
     </head>
-    <body>
-        <form method="post" action="Servlet_Connexion">
-            <fieldset>
-                <legend>Connexion</legend>
-                <p>Vous pouvez vous connecter via ce formulaire.</p>
+    <body onresize="alignBox()">
+        <div id="background">
+            <div id="colors"></div>
+            <div id="mainDiv">
+                <h2 id="greet">Welcome Back !</h2>
+                <h4 id="contentQuestion">Veuillez entrer vos identifiants</h4>
+    
+                <div id="namePicker">
+                    <form method="post" action="Servlet_Connexion" id="form">
+                        <input id="pseudo" type="text" placeholder="Pseudo" name="pseudo" maxlength="60" />
+                        <input id="motdepasse" type="password" placeholder="Mot de Passe" name="motdepasse" maxlength="20" />
+                        <input type="button" onclick="verifierEntree()" value="Connexion"/>
+                    </form>
+                </div>
 
-                <label for="nom">Pseudo <span class="requis">*</span></label>
-                <input type="text" id="pseudo" name="pseudo" size="20" maxlength="60" />
-                <br />
-
-                <label for="motdepasse">Mot de passe <span class="requis">*</span></label>
-                <input type="password" id="motdepasse" name="motdepasse" value="" size="20" maxlength="20" />
-                <br />
-
-                <input type="submit" value="Connexion" class="sansLabel" />
-                <br />
                 <%-- Vérification de la présence d'un objet utilisateur en session --%>
                 <c:if test="${!empty sessionScope.sessionU}">
-                    <%-- Si l'utilisateur existe en session, alors on affiche son adresse email. --%>
-                    <p>Vous êtes connecté(e) avec le pseudo : ${sessionScope.sessionU.pseudo}</p>
+                    <jsp:forward page="index.jsp"></jsp:forward>
                 </c:if>
-            </fieldset>
-        </form>
+            </div>
+        </div>
     </body>
 </html>
