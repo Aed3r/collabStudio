@@ -74,7 +74,7 @@ public class FileUpload extends HttpServlet {
 			ResultSet res = d.reqSQL("SELECT id FROM sons WHERE son =\"" + destination.name + "\"");
 			try {
 				res.next();
-				id = res.getInt("id");
+				int id = res.getInt("id");
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

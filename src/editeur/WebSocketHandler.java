@@ -56,31 +56,37 @@ public class WebSocketHandler {
 		}
 		
 		JSONObject json = (JSONObject) obj;
-		
+		LoadDriver d = new LoadDriver();
 		switch((String) json.get("action")) {
 			case "saveTrack":
 				String track = (String) json.get("track");
 				String projectID = (String) json.get("projectID");
 				//On enregistre dans la DB
-				LoadDriver d = new LoadDriver();
-				
 				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";"))
 					System.out.println("Inscription réussie");
 				}else {
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
-				String userName = (String) json.get("userName");
-				// Enregistrer dans db
 				break;
 			case "newProject":
 				String nom = (String) json.get("nom");
+				String userName = (String) json.get("userName");
 				// Enregistrer dans db
-				LoadDriver d = new LoadDriver();
 				
-				if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");"))
+				ResultSet res = d.reqSQL("SELECT id FROM Utilisateurs WHERE pseudo=\"" + userName + "\"");
+				int uid;
+				try {
+					res.next();
+					uid = res.getInt("id");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
+
+				if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");")){
 					System.out.println("Inscription réussie");
-				}else {
+				}else{
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
