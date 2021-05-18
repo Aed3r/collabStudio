@@ -34,47 +34,53 @@ public class Servlet_Connexion extends HttpServlet {
      * @param response La réponse envoyée par la Servlet
      */
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {	
-		Connexion co = new  Connexion();
 		
 		// on récupère les paramètres entrés dans le formulaire
 		String pseudo = request.getParameter("pseudo");
-		String mdp = request.getParameter("mdp");
-				
+		String mdp = request.getParameter("motdepasse");
+		
+		
 		//on crée un utilisateur pour comparer
 		utilisateurs user = new utilisateurs();
 		user.setPseudo(pseudo);
 		user.setMdp(mdp);
-				
+		
 		//if user est dans la base de donnée
 		//On vérifie que l'utilisateur existe
 		LoadDriver d = new LoadDriver();
-		ResultSet res = d.reqSQL("SELECT pseudo, mot_de_passe FROM Utilisateurs WHERE pseudo=\"" + user.getPseudo() + "\" AND nom=\""+ user.getMdp() + "\";");
-				
+		ResultSet res = d.reqSQL("SELECT pseudo, mot_de_passe, nom, prenom FROM Utilisateurs WHERE pseudo=\"" + user.getPseudo() + "\" AND mot_de_passe=\""+ user.getMdp() + "\";");
 		try {
-			if(res.getString("pseudo") == pseudo && res.getString("mot_de_passe") == mdp) {
+			res.next();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	
+		try {
+			if(res.getString("pseudo").equals(pseudo) && res.getString("mot_de_passe").equals(mdp)) {
 				//on crée une session pour l'utilisateur
 				HttpSession session = request.getSession();
 				session.setAttribute("sessionU", user);
 				session.setAttribute("pseudo", user.getPseudo());
 				
-				//request.setAttribute("co", co);
 				request.setAttribute("user", user);
-				request.setAttribute("nom", user.getNom());
-				request.setAttribute("prenom", user.getPrenom());
+				request.setAttribute("nom", res.getString("nom"));
+				request.setAttribute("prenom", res.getString("prenom"));
 				request.setAttribute("pseudo", user.getPseudo());
 				request.setAttribute("mdp", user.getMdp());
+				request.setAttribute("session", session);
 				
 				//renvoie à connexion.jsp
 				this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+				System.out.println("connecté");
 			}
-		}catch (SQLException e){
+		} catch (SQLException e){
 			System.out.println(e.toString());
+			response.sendRedirect("/collabStudio/connexion.jsp#erreur");
 		}
-			d.close();
+		d.close();
 				
-		//Si on arrive ici c'est que ce n'est pas bon
-		//this.getServletContext().getRequestDispatcher("/connexion.jsp").forward(request, response);
-		response.sendRedirect("/collabStudio/connexion.jsp#erreur");
 		//on récupère l'utilisateur renvoyé par Connexion.java
 		//utilisateurs user = co.connect(request);
 	}

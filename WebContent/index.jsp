@@ -10,12 +10,14 @@
         </head>
 
         <body>
-            <c:if test="${empty sessionScope.sessionU}">
-                <jsp:forward page="acceuil.html"></jsp:forward>
-            </c:if>
-
+ 
+ 			<% if (session.getAttribute("pseudo") == null) {
+ 				response.sendRedirect("/collabStudio/acceuil.html");
+ 			}%>
+        	
+        	<p>Vous êtes ${ sessionScope.pseudo } </p>
             <p>
-                <% 
+            <% 
             String name =  (String) request.getAttribute("nom");
 	 		String firstname = (String) request.getAttribute("prenom");
 	 		String pseudo = (String) request.getAttribute("pseudo");
