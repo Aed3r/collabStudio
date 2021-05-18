@@ -32,7 +32,7 @@ body {
 }
 
 #logo {
-    top: calc(50% - 75px);
+    top: calc(50% - 100px);
     position: absolute;
 }
 

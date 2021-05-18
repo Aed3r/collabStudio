@@ -13,6 +13,10 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Maintient les connections WebSocket lors de l'utilisation de l'éditeur et permet d'informer les utilisateurs de nouveaux fichiers
@@ -39,15 +43,38 @@ public class WebSocketHandler {
 	
 	@OnMessage
 	public void onMessage(Session session, String message) {
-		for (Session s : sessions) {
-			if (s != session) {
-				try {
-					s.getBasicRemote().sendText(message);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		JSONParser parser = new JSONParser();
+		Object obj = null;
+		
+		try{
+			obj = parser.parse(message);
+		} catch(ParseException pe) {
+			System.out.println(pe);
+		}
+		
+		JSONObject json = (JSONObject) obj;
+		
+		switch((String) json.get("action")) {
+			case "saveTrack":
+				String track = (String) json.get("track");
+				// Enregistrer dans db
+				break;
+			case "newProject":
+				String nom = (String) json.get("nom");
+				// Enregistrer dans db
+				break;
+			default:
+				for (Session s : sessions) {
+					if (s != session) {
+						try {
+							s.getBasicRemote().sendText(message);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
-			}
+				break;
 		}
 	}
 	

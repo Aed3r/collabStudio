@@ -393,3 +393,17 @@ input.addEventListener("keyup", function(event) {
     document.getElementById("envoyerMsg").click();
   }
 }); 
+
+function enregistrer() {
+    sendTrack(track);
+}
+
+function loadTrack(newTrack) {
+    track = newTrack;
+    let node = track.head;
+
+    while (node) {
+        addSound(node);
+        node = node.next;
+    }
+}
