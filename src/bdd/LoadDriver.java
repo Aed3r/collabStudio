@@ -19,12 +19,12 @@ public class LoadDriver {
     
     public LoadDriver() {
     	try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            System.out.println("Instance créée");
-        } catch (Exception ex) {
-            // handle the error
-        	System.out.println(ex);
-        }
+			Class.forName(driver);
+			System.out.println("Driver ok!");
+		} catch (ClassNotFoundException e) {
+			System.err.println("Problème de driver! " + e.getMessage());
+            System.exit(0);
+		}
 
         try {
             c = DriverManager.getConnection(url, id, pwd);
@@ -53,8 +53,7 @@ public class LoadDriver {
         }
     }
 
-    public boolean reqSQL (String query, char type) {
-        if (type == 'm') {
+    public Boolean upSQL (String query) {        
             try {
                 nbLignes = s.executeUpdate(query);
                 return true;
@@ -62,14 +61,15 @@ public class LoadDriver {
                 System.out.println("Probleme lors de l'éxecution de la update \"" + query + "\": " + e.getLocalizedMessage());
                 return false;
             }
-        } else if (type == 's') {
-            try {
-                r = s.executeQuery(query);
-                return true;
-            } catch (SQLException e) {
-                System.out.println("Probleme lors de l'éxecution de la query \"" + query + "\": " + e.getLocalizedMessage());
-                return false;
-            }
-        } else return false;
+    }
+    
+    public ResultSet reqSQL(String query) {
+    	try {
+    		ResultSet res = s.executeQuery(query);
+    		return res;
+    	}catch (SQLException e) {
+            System.out.println("Probleme lors de l'éxecution de la query \"" + query + "\": " + e.getLocalizedMessage());
+            return null;
+        }
     }
 }
