@@ -10,6 +10,9 @@
         </head>
 
         <body>
+            <c:if test="${empty sessionScope.sessionU}">
+                <jsp:forward page="acceuil.html"></jsp:forward>
+            </c:if>
 
             <p>
                 <% 

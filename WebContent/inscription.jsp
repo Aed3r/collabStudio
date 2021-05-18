@@ -12,6 +12,7 @@
     <body onresize="alignBox()">
         <div id="background">
             <div id="colors"></div>
+            <%@ include file = "header.html" %>
             <div id="mainDiv">
                 <h2 id="greet">Bienvenue</h2>
                 <h4 id="contentQuestion">Veuillez entrer vos identifiants</h4>
@@ -22,6 +23,7 @@
 						<input type="text" name="prenom" id="prenom" placeholder="Prénom"/>
 						<input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"/>
 						<input type="password" name="mdp" id="mdp" placeholder="Mot de passe"/>
+                        <a href="connexion.jsp">Se connecter</a> 
 						<input type="button" onclick="verifierEntree()" value="S'inscrire"/>
 					</form>
                 </div>

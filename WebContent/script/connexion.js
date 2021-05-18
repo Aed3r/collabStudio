@@ -50,3 +50,10 @@ function isNullOrWhitespace(input) {
 
     return input.replace(/\s/g, '').length < 1;
 }
+
+// On vérifie s'il y a eu erreur
+var hash = location.hash.split('#');
+
+if (hash && hash.length > 0 && hash[1] == "erreur") {
+    document.getElementById("erreur").style.display = "inline-block";
+}
