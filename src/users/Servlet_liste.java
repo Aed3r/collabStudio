@@ -55,6 +55,6 @@ public class Servlet_liste extends HttpServlet {
 		}
 		
 		d.close();
-		this.getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher("/connexion.jsp").forward(request, response);
 	}
 }
