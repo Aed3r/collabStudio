@@ -57,15 +57,17 @@ public class WebSocketHandler {
 		switch((String) json.get("action")) {
 			case "saveTrack":
 				String track = (String) json.get("track");
+				String projectID = (String) json.get("projectID");
 				//On enregistre dans la DB
 				LoadDriver d = new LoadDriver();
 				
-				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=;"))
+				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";"))
 					System.out.println("Inscription réussie");
 				}else {
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
+				// Enregistrer dans db
 				break;
 			case "newProject":
 				String nom = (String) json.get("nom");

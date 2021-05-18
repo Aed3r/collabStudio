@@ -58,8 +58,37 @@ public class FileUpload extends HttpServlet {
 	        newFiles.get(1).add(fileName);
 	        
 	        // Enregistrer dans db : (projectID, destination.name)
+			LoadDriver d = new LoadDriver();
+
+
+			if(d.upSQL("INSERT INTO sons(son) VALUES (\""+destination.name+"\");"))
+				System.out.println("INSERTION OK");
+			}else {
+				System.out.println("Problème requete INSERT SON");
+			}
+
+
+			ResultSet res = d.reqSQL("SELECT id FROM sons WHERE son =\"" + destination.name + "\"");
+			try {
+				res.next();
+				id = res.getInt("id");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+
+
+			if(d.upSQL("INSERT INTO musique_sons(musique_id, son_id) VALUES (\""+projectID+"\",\"" + id + "\");"))
+				System.out.println("LINK REUSSI");
+			}else {
+				System.out.println("Problème requete INSERT MUSIQUE_SON");
+			}
+
+			d.close();
 	    }
 	    
+
 	    WebSocketHandler.sendNewFilesUpdate(newFiles);
 	}
 	
