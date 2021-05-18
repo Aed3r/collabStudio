@@ -34,7 +34,6 @@ public class Servlet_Connexion extends HttpServlet {
      * @param response La réponse envoyée par la Servlet
      */
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException {	
-		Connexion co = new  Connexion();
 		
 		// on récupère les paramètres entrés dans le formulaire
 		String pseudo = request.getParameter("pseudo");
@@ -65,7 +64,6 @@ public class Servlet_Connexion extends HttpServlet {
 				session.setAttribute("sessionU", user);
 				session.setAttribute("pseudo", user.getPseudo());
 				
-				request.setAttribute("co", co);
 				request.setAttribute("user", user);
 				request.setAttribute("nom", res.getString("nom"));
 				request.setAttribute("prenom", res.getString("prenom"));
