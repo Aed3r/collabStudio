@@ -8,9 +8,15 @@ var tracks = document.getElementById("tracks");
 var sounds = {};
 var soundTitles = {};
 var playingStatus = "paused";
+var projectName = null;
 
-//tracksFrame.removeAttribute("src");
-//var tracks = tracksFrame.contentWindow.document.getElementById("tracks");
+// On récupère le nom du projet
+var hash = location.hash.split('#');
+
+if (hash && hash.length > 0) {
+    projectName = hash[1];
+} else document.location.pathname = '/collabStudio';
+
 
 function newItem(id, title) {
     let template = itemTemplate.cloneNode(true);
@@ -395,7 +401,7 @@ input.addEventListener("keyup", function(event) {
 }); 
 
 function enregistrer() {
-    sendTrack(track);
+    sendTrack(track, projectID);
 }
 
 function loadTrack(newTrack) {
@@ -406,4 +412,8 @@ function loadTrack(newTrack) {
         addSound(node);
         node = node.next;
     }
+}
+
+function getProjectName() {
+    return projectName;
 }

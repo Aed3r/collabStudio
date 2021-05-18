@@ -40,7 +40,7 @@ public class FileUpload extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    //String description = request.getParameter("user");
+	    String projectID = request.getParameter("projectID");
 	    List<Part> fileParts = request.getParts().stream().filter(part -> "files".equals(part.getName()) && part.getSize() > 0).collect(Collectors.toList());
 		List<List<String>> newFiles = new ArrayList<>();
 		newFiles.add(new ArrayList<>());
@@ -56,6 +56,8 @@ public class FileUpload extends HttpServlet {
 	        
 	        newFiles.get(0).add(destination.getName());
 	        newFiles.get(1).add(fileName);
+	        
+	        // Enregistrer dans db : (projectID, destination.name)
 	    }
 	    
 	    WebSocketHandler.sendNewFilesUpdate(newFiles);

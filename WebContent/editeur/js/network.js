@@ -47,14 +47,13 @@ function connectToWebsocket() {
 connectToWebsocket();
 
 async function fileUpload(elem) {
-    //let user = { name: 'john', age: 34 };
     let formData = new FormData();
 
     Array.from(elem.files).forEach(file => {
         formData.append("files", file);
     });
 
-    //formData.append("user", JSON.stringify(user));
+    formData.append("projectID", getProjectName());
 
     const ctrl = new AbortController() // timeout
     setTimeout(() => ctrl.abort(), 5000);
@@ -79,8 +78,8 @@ function sendMsg(msg) {
     ws.send(JSON.stringify(packet));
 }
 
-function sendTrack(track) {
-    let packet = {"action": "saveTrack", "track": JSON.stringify(track)};
+function sendTrack(track, projectID) {
+    let packet = {"action": "saveTrack", "track": JSON.stringify(track), "projectID": projectID};
 
     ws.send(JSON.stringify(packet));
 }
