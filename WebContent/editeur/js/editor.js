@@ -19,7 +19,7 @@ if (hash && hash.length > 0) {
 } else document.location.pathname = '/collabStudio';
 
 // On récupère le nom de l'utilisateur
-userName = document.getElementById("nomUtilisateur").value;
+userName = document.getElementById("nomUtilisateur").textContent;
 
 if(userName == "") document.location.pathname = '/collabStudio';
 
@@ -407,7 +407,7 @@ input.addEventListener("keyup", function(event) {
 }); 
 
 function enregistrer() {
-    sendTrack(track, projectID, userName);
+    sendTrack(track, projectName, userName);
 }
 
 function loadTrack(newTrack) {
