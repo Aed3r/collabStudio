@@ -50,7 +50,10 @@ public class Servlet_Connexion extends HttpServlet {
 		LoadDriver d = new LoadDriver();
 		ResultSet res = d.reqSQL("SELECT pseudo, mot_de_passe, nom, prenom FROM Utilisateurs WHERE pseudo=\"" + user.getPseudo() + "\" AND mot_de_passe=\""+ user.getMdp() + "\";");
 		try {
-			res.next();
+			if(!res.next()){
+				d.close();
+				return;
+			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

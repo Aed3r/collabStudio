@@ -1,4 +1,5 @@
 <%@page import="users.utilisateurs"%>
+<%@page import="bdd.Projects"%>
     <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
         <!DOCTYPE html>
@@ -30,6 +31,13 @@
             <a href="inscription.jsp"> Inscription </a> <br>
             <a href="connexion.jsp"> Connexion </a> <br>
             <a href="<%=request.getContextPath()+"/Servlet_Deconnexion"%>">Deconnexion</a>
+
+            <% Projects p = new Projects(name);
+            listId = Projects.getListId();
+            listName = Projects.getListName();
+            for(int i=0; i < listName.size(); i++){ %>
+                <div> <%listName.get(i)%></div>
+            <%}%>
         </body>
 
         </html>
