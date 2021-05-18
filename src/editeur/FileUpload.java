@@ -62,9 +62,9 @@ public class FileUpload extends HttpServlet {
 	        
 	        // Enregistrer dans db : (projectID, destination.name)
 			LoadDriver d = new LoadDriver();
+			int id;
 
-
-			if(d.upSQL("INSERT INTO sons(son) VALUES (\""+destination.getName()+"\");")) {
+			if(d.upSQL("INSERT INTO sons(son, nom) VALUES (\""+destination.name+"\", \"",+fileName+"\");"))
 				System.out.println("INSERTION OK");
 			} else {
 				System.out.println("Problème requete INSERT SON");

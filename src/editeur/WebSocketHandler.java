@@ -62,7 +62,7 @@ public class WebSocketHandler {
 				String track = (String) json.get("track");
 				String projectID = (String) json.get("projectID");
 				//On enregistre dans la DB
-				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";")) {
+				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";")){
 					System.out.println("Inscription réussie");
 				} else {
 					System.out.println("Problème requete inscription");
@@ -93,10 +93,28 @@ public class WebSocketHandler {
 				d.close();
 				break;
 			case "requestData":
-				String projectName = (String) json.get("project");
+				String pID = (String) json.get("project");
 				String user = (String) json.get("username");
 				// Envoyer sons
+				ResultSet sons_id = d.reqSQL("SELECT son_id FROM musique_sons WHERE musique_id="+pID+";");
+				try {
+					while(sons_id.next()){
+						//Recupere le son ici
+						sons_id.getString("son_id");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 				// Envoyer track
+				ResultSet track = d.reqSQL("SELECT track FROM musique WHERE id="+pID+";");
+				try {
+					track.next();
+					//recuperer track ici
+					track_recup = track.getString("track");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			default:
 				for (Session s : sessions) {
 					if (s != session) {

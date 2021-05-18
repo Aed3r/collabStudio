@@ -12,4 +12,5 @@
 !*.js
 !*.svg
 !.gitignore
+!*.sql
 /build/
