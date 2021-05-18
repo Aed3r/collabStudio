@@ -67,6 +67,7 @@ public class WebSocketHandler {
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
+				String userName = (String) json.get("userName");
 				// Enregistrer dans db
 				break;
 			case "newProject":

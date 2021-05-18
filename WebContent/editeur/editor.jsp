@@ -13,6 +13,7 @@
 
     <body>
         <%@ include file = "header.html" %>
+        <span id="nomUtilisateur">${sessionScope.pseudo}</span>
 
         <template id="item-template">
             <div class="soundItem" onclick="selectItem(this)">

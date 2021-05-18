@@ -9,6 +9,7 @@ var sounds = {};
 var soundTitles = {};
 var playingStatus = "paused";
 var projectName = null;
+var userName = null;
 
 // On récupère le nom du projet
 var hash = location.hash.split('#');
@@ -16,6 +17,11 @@ var hash = location.hash.split('#');
 if (hash && hash.length > 0) {
     projectName = hash[1];
 } else document.location.pathname = '/collabStudio';
+
+// On récupère le nom de l'utilisateur
+userName = document.getElementById("nomUtilisateur").textContent;
+
+if(userName == "") document.location.pathname = '/collabStudio';
 
 
 function newItem(id, title) {
@@ -401,7 +407,7 @@ input.addEventListener("keyup", function(event) {
 }); 
 
 function enregistrer() {
-    sendTrack(track, projectID);
+    sendTrack(track, projectName, userName);
 }
 
 function loadTrack(newTrack) {
