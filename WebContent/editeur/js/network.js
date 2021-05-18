@@ -84,3 +84,9 @@ function sendTrack(track) {
 
     ws.send(JSON.stringify(packet));
 }
+
+function newProject(nom) {
+    let packet = {"action": "newProject", "nom": nom};
+
+    ws.send(JSON.stringify(packet));
+}

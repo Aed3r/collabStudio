@@ -56,6 +56,11 @@ public class WebSocketHandler {
 		
 		switch((String) json.get("action")) {
 			case "saveTrack":
+				String track = (String) json.get("track");
+				// Enregistrer dans db
+				break;
+			case "newProject":
+				String nom = (String) json.get("nom");
 				// Enregistrer dans db
 				break;
 			default:
