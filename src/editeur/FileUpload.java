@@ -62,9 +62,9 @@ public class FileUpload extends HttpServlet {
 	        
 	        // Enregistrer dans db : (projectID, destination.name)
 			LoadDriver d = new LoadDriver();
+			int id;
 
-
-			if(d.upSQL("INSERT INTO sons(son) VALUES (\""+destination.name+"\");"))
+			if(d.upSQL("INSERT INTO sons(son, nom) VALUES (\""+destination.name+"\", \"",+fileName+"\");"))
 				System.out.println("INSERTION OK");
 			}else {
 				System.out.println("Problème requete INSERT SON");
@@ -74,7 +74,7 @@ public class FileUpload extends HttpServlet {
 			ResultSet res = d.reqSQL("SELECT id FROM sons WHERE son =\"" + destination.name + "\"");
 			try {
 				res.next();
-				int id = res.getInt("id");
+				id = res.getInt("id");
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
