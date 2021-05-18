@@ -1,41 +1,37 @@
-<%@page import="users.utilisateurs"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-<jsp:useBean id="listofuser" class="users.tmp_listUsers" scope="application"></jsp:useBean>
-
-<c:if test="${ not empty param.nom and not empty  param.prenom and not empty  param.mdp and not empty  param.pseudo }">
-	<jsp:useBean id="newU" class="users.utilisateurs" ></jsp:useBean>
-	<c:set target="${newU}" property="nom" value="${ param.nom }" />
-	<c:set target="${newU}" property="prenom" value="${ param.prenom }" />
-	<c:set target="${newU}" property="mdp" value="${ param.mdp }" />
-	<c:set target="${newU}" property="pseudo" value="${ param.pseudo }" />
-	<% listofuser.add(newU);%>
-</c:if>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>New User</title>
-</head>
-<body>
-	<form action="Servlet_liste" method="post" >
-		<label for="t1">Nom</label> : <input type="text" name="nom" id="t1" />
-		<br/>
-		<label for="t2">Prénom </label> : <input type="text" name="prenom" id="t2" />
-		<br/>
-		<label for="t3">Pseudo </label> : <input type="text" name="pseudo" id="t3" />
-		<br/>
-		<label for="t4">Password </label> : <input type="password" name="mdp" id="t4" />
-		<br/>
-		<button type="submit">Ajouter !</button>
-	</form>
-</body>
-</html>
+    <head>
+        <title>Inscription</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles/connexion.css">
+        <script src="script/inscription.js" async defer></script>
+    </head>
+    <body onresize="alignBox()">
+        <div id="background">
+            <div id="colors"></div>
+            <div id="mainDiv">
+                <h2 id="greet">Bienvenue</h2>
+                <h4 id="contentQuestion">Veuillez entrer vos identifiants</h4>
+    
+                <div id="namePicker">
+					<form action="Servlet_liste" method="post" id="form">
+						<input type="text" name="nom" id="nom" placeholder="Nom"/>
+						<input type="text" name="prenom" id="prenom" placeholder="Prénom"/>
+						<input type="text" name="pseudo" id="pseudo" placeholder="Pseudo"/>
+						<input type="password" name="mdp" id="mdp" placeholder="Mot de passe"/>
+						<input type="button" onclick="verifierEntree()" value="S'inscrire"/>
+					</form>
+                </div>
 
+                <%-- Vérification de la présence d'un objet utilisateur en session --%>
+                <c:if test="${!empty sessionScope.sessionU}">
+                    <jsp:forward page="index.jsp"></jsp:forward>
+                </c:if>
+            </div>
+        </div>
+    </body>
+</html>
 
