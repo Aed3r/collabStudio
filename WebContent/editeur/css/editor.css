@@ -93,6 +93,7 @@ body {
     position: absolute;
     border-radius: 10px;
     filter: blur(4px);
+    pointer-events: none;
 }
 
 #selectorSpan {

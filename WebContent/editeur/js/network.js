@@ -32,6 +32,10 @@ function connectToWebsocket() {
                 afficherMsg(m.msg);
                 break;
 
+            case "loadTrack":
+                loadTrack(m.track);
+                break;
+
             default:
                 break;
         }
@@ -71,6 +75,12 @@ function sendChange(action, node) {
 
 function sendMsg(msg) {
     let packet = {"action": "msg", "msg": msg};
+
+    ws.send(JSON.stringify(packet));
+}
+
+function sendTrack(track) {
+    let packet = {"action": "saveTrack", "track": JSON.stringify(track)};
 
     ws.send(JSON.stringify(packet));
 }

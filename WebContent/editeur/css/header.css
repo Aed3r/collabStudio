@@ -24,3 +24,14 @@
     color:white;
     font-size: 40px;
 }
+
+#save {
+    background-image: url("data/img/floppy-disk.svg");
+    width: 30px;
+    height: 30px;
+    display: block;
+    background-size: 100% auto;
+    position: absolute;
+    right: 30px;
+    cursor: pointer;
+}
