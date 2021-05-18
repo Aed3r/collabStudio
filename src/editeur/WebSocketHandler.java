@@ -64,7 +64,7 @@ public class WebSocketHandler {
 				//On enregistre dans la DB
 				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";")){
 					System.out.println("Inscription réussie");
-				}else {
+				} else {
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
@@ -81,6 +81,7 @@ public class WebSocketHandler {
 					uid = res.getInt("id");
 				} catch (SQLException e1) {
 					e1.printStackTrace();
+					return;
 				}
 
 
