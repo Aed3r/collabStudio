@@ -18,6 +18,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
+import bdd.LoadDriver;
+import java.sql.*;
+
 /**
  * Maintient les connections WebSocket lors de l'utilisation de l'éditeur et permet d'informer les utilisateurs de nouveaux fichiers
  */
@@ -53,40 +56,65 @@ public class WebSocketHandler {
 		}
 		
 		JSONObject json = (JSONObject) obj;
-		
+		LoadDriver d = new LoadDriver();
 		switch((String) json.get("action")) {
 			case "saveTrack":
 				String track = (String) json.get("track");
 				String projectID = (String) json.get("projectID");
 				//On enregistre dans la DB
-				LoadDriver d = new LoadDriver();
-				
-				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";"))
+				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";")){
 					System.out.println("Inscription réussie");
-				}else {
+				} else {
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
-				String userName = (String) json.get("userName");
-				// Enregistrer dans db
 				break;
 			case "newProject":
 				String nom = (String) json.get("nom");
+				String userName = (String) json.get("userName");
 				// Enregistrer dans db
-				LoadDriver d = new LoadDriver();
 				
-				if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");"))
+				ResultSet res = d.reqSQL("SELECT id FROM Utilisateurs WHERE pseudo=\"" + userName + "\"");
+				int uid;
+				try {
+					res.next();
+					uid = res.getInt("id");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					return;
+				}
+
+
+				if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");")){
 					System.out.println("Inscription réussie");
-				}else {
+				}else{
 					System.out.println("Problème requete inscription");
 				}
 				d.close();
 				break;
 			case "requestData":
-				String projectID = (String) json.get("project");
-				String userName = (String) json.get("username");
+				String pID = (String) json.get("project");
+				String user = (String) json.get("username");
 				// Envoyer sons
+				ResultSet sons_id = d.reqSQL("SELECT son_id FROM musique_sons WHERE musique_id="+pID+";");
+				try {
+					while(sons_id.next()){
+						//Recupere le son ici
+						sons_id.getString("son_id");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 				// Envoyer track
+				ResultSet track = d.reqSQL("SELECT track FROM musique WHERE id="+pID+";");
+				try {
+					track.next();
+					//recuperer track ici
+					track_recup = track.getString("track");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			default:
 				for (Session s : sessions) {
 					if (s != session) {

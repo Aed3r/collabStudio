@@ -1,3 +1,8 @@
+// On récupère le nom de l'utilisateur
+var userName = document.getElementById("nomUtilisateur").textContent;
+
+if (userName == "") document.location.pathname = '/collabStudio';
+
 // Place la div principale verticalement
 function alignBox() {
     var box = document.getElementById("mainDiv");
@@ -30,7 +35,7 @@ function verifierEntree() {
         return;
     }
 
-    newProject(nom.value);
+    newProject(nom.value, userName);
     let endUrl = window.location.origin + '/collabStudio/editeur/editor.jsp#' + nom.value;
     document.location.href = endUrl;
 }

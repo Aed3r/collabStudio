@@ -1,6 +1,6 @@
 <%@page import="users.utilisateurs"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="bdd.Projects"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,9 +26,13 @@
         %>
         </p>
         -->
-        
-        
 
+        <% Projects p = new Projects(name);
+        listId = Projects.getListId();
+        listName = Projects.getListName();
+        for(int i=0; i < listName.size(); i++){ %>
+            <div> <%listName.get(i)%></div>
+        <%}%>
     </body>
 
 </html>

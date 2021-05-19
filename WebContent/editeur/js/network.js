@@ -5,7 +5,9 @@ function connectToWebsocket() {
     ws = new WebSocket(document.location.origin.replace(/^http(.*)/, "ws$1") + "/collabStudio/wsHandler");
 
     ws.onopen = function() {};
-    ws.onclose = function() {};
+    ws.onclose = function() {
+        console.log("Connection au serveur fermé !");
+    };
     ws.onmessage = function(event) {
         let m = JSON.parse(event.data);
 
@@ -60,7 +62,7 @@ async function fileUpload(elem) {
 
     formData.append("projectID", getProjectName());
 
-    const ctrl = new AbortController() // timeout
+    const ctrl = new AbortController(); // timeout
     setTimeout(() => ctrl.abort(), 5000);
 
     try {
@@ -72,31 +74,31 @@ async function fileUpload(elem) {
 }
 
 function sendChange(action, node) {
-    let packet = {"action": action, "node": node};
+    let packet = { "action": action, "node": node };
 
     ws.send(JSON.stringify(packet));
 }
 
 function sendMsg(msg) {
-    let packet = {"action": "msg", "msg": msg};
+    let packet = { "action": "msg", "msg": msg };
 
     ws.send(JSON.stringify(packet));
 }
 
-function sendTrack(track, projectID, userName) {
-    let packet = {"action": "saveTrack", "track": JSON.stringify(track), "projectID": projectID, "userName": userName};
+function sendTrack(track, projectID) {
+    let packet = { "action": "saveTrack", "track": JSON.stringify(track), "projectID": projectID };
 
     ws.send(JSON.stringify(packet));
 }
 
-function newProject(nom) {
-    let packet = {"action": "newProject", "nom": nom};
+function newProject(nom, userName) {
+    let packet = { "action": "newProject", "nom": nom, "userName": userName };
 
     ws.send(JSON.stringify(packet));
 }
 
 function requestData(projectID, userID) {
-    let packet = {"action": "requestData", "project": projectID, "username": userID};
+    let packet = { "action": "requestData", "project": projectID, "username": userID };
 
     ws.send(JSON.stringify(packet));
 }
