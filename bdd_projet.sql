@@ -45,7 +45,7 @@ CREATE TABLE `messages` (
 --
 -- Table structure for table `musique`
 --
-;
+
 CREATE TABLE `musique` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE `Utilisateurs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `userProjects`;
-create table `userProjets` (
+create table `userProjects` (
   `projectID` int(11) NOT NULL, 
   `userID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
