@@ -35,3 +35,42 @@
     right: 30px;
     cursor: pointer;
 }
+
+#addUser {
+    background-image: url("data/img/add-user.svg");
+    width: 30px;
+    height: 30px;
+    display: block;
+    background-size: 100% auto;
+    position: absolute;
+    right: 0px;
+    cursor: pointer;
+}
+
+#userAddField {
+    background: #FFF;
+    position: relative;
+    height: 28px;
+    outline: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    transition: all .5s;
+    visibility: hidden;
+    top: 0;
+    right: -180px;
+    width: 0;
+}
+
+#userField {
+    width: 259px;
+    height: 32px;
+    position: absolute;
+    right: 75px;
+}
+
+#userField:hover #userAddField {
+    width: 300px;
+    top: 0;
+    right: 80px;
+    visibility: visible;
+}

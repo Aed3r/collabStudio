@@ -26,3 +26,9 @@
     color:white;
     font-size: 40px;
 }
+
+#header a {
+    position: absolute;
+    right: 20px;
+    color: white;
+}

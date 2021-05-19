@@ -48,3 +48,5 @@ function isNullOrWhitespace(input) {
 
     return input.replace(/\s/g, '').length < 1;
 }
+
+document.location.hash=""

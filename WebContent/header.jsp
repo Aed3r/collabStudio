@@ -17,7 +17,7 @@
                 <span id="logo1">collab</span><span id="logo2">STUDIO</span>
             </div>
             <% if (session.getAttribute("pseudo") != null) {%>
-                <a href="<%=request.getContextPath()+'/Servlet_Deconnexion'%>">Déconnexion</a>
+                <a href="/collabStudio/Servlet_Deconnexion">Déconnexion</a>
             <%}%>
         </div>
     </body>

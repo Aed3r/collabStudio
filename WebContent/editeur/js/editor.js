@@ -379,6 +379,7 @@ function envoyerMsg() {
     let msg = entree.value.trim();
 
     if (msg != "") {
+        msg = userName + ": " + msg;
         sendMsg(msg);
         afficherMsg(msg);
         entree.value = "";
@@ -443,4 +444,12 @@ function loadSounds(sounds) {
     soundsLoaded = true;
     console.log("sounds loaded");
     if (trackToLoad) loadTrack();
+}
+
+function addUser() {
+    let user = document.getElementById("userAddField").value;
+
+    if (user.trim() != "") {
+        addUserToProj(user.trim(), projectName);
+    }
 }

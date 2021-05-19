@@ -135,6 +135,13 @@ public class WebSocketHandler {
 				}
 				
 				break;
+			case "addUser":
+				String projID = (String) json.get("project");
+				String newUser = (String) json.get("username");
+
+				// Ajouter user à la bdd
+
+				break;
 			default:
 				for (Session s : sessions) {
 					if (s != session) {

@@ -107,3 +107,9 @@ function requestData(projectID, userID) {
 
     ws.send(JSON.stringify(packet));
 }
+
+function addUserToProj(user, projectID) {
+    let packet = { "action": "addUser", "project": projectID, "username": user };
+
+    ws.send(JSON.stringify(packet));
+}
