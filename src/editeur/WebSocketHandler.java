@@ -91,7 +91,7 @@ public class WebSocketHandler {
 
 				if (uid != -1) {
 					if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");")){
-						System.out.println("Inscription réussie");
+						System.out.println("Création nouveau projet réussie");
 					}else{
 						System.out.println("Problème requete inscription");
 					}
@@ -139,7 +139,33 @@ public class WebSocketHandler {
 				String projID = (String) json.get("project");
 				String newUser = (String) json.get("username");
 
-				// Ajouter user à la bdd
+				res = d.reqSQL("SELECT id FROM Utilisateurs WHERE pseudo LIKE \"" + newUser + "\"");
+				uid = -1;
+				try {
+					if (res.next()) {
+						uid = res.getInt("id");
+					}
+				} catch (SQLException e1) {
+					System.out.println("Cet utilisateur n'existe pas");
+					return;
+				}
+
+				res = d.reqSQL("SELECT id FROM musique WHERE titre LIKE \"" + projID + "\"");
+				int projectRef = -1;
+				try {
+					if (res.next()) {
+						projectRef = res.getInt("id");
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					return;
+				}
+
+				if(d.upSQL("INSERT INTO userProjects(projectID, userID) VALUES (\""+projectRef+"\",\"" + uid + "\");")){
+					System.out.println("Ajout réussi");
+				}else{
+					System.out.println("Problème requete inscription");
+				}
 
 				break;
 			default:
@@ -177,13 +203,16 @@ public class WebSocketHandler {
 	}
 	
 	static void sendFiles (List<List<String>> newFiles, Session s) {	
-		String res = "{\"action\":\"loadSounds\", \"data\":[";
+		String res = "{\"action\":\"loadSounds\", \"data\":";
 		int i;
 		
-		for (i = 0; i < newFiles.get(0).size()-1; i++) {
-			res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"], ";
-		}
-		res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"]]}";
+		if (newFiles.get(0).size() != 0) {
+			res += "[";
+			for (i = 0; i < newFiles.get(0).size()-1; i++) {
+				res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"], ";
+			}
+			res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"]]}";
+		} else res += "\"null\"}";
 				
 		try {
 			s.getBasicRemote().sendText(res);

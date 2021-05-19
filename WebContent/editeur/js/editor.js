@@ -437,9 +437,11 @@ function getProjectName() {
 }
 
 function loadSounds(sounds) {
-    sounds.forEach(sound => {
-        newItem(sound[0], sound[1]);
-    });
+    if (sounds != null) {
+        sounds.forEach(sound => {
+            newItem(sound[0], sound[1]);
+        });
+    }
 
     soundsLoaded = true;
     console.log("sounds loaded");

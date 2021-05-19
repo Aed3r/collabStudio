@@ -30,7 +30,7 @@
                     <span id="selectorSpan">Sélection de contenu</span>
                     <div id="contentSelector"></div>
                     <div id="fileUploadMask">
-                        <input type="file" id="soundAdder" multiple="true" onchange="fileUpload(this)" />
+                        <input type="file" id="soundAdder" multiple="true" onchange="fileUpload(this)" accept="audio/mpeg3"/>
                     </div>
                 </div>
             </div>

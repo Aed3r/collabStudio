@@ -89,6 +89,17 @@ CREATE TABLE `Utilisateurs` (
   `mot_de_passe` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `userProjects`;
+create table `userProjets` (
+  `projectID` int(11) NOT NULL, 
+  `userID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `userProjects`
+  ADD PRIMARY KEY (`projectID`, `userID`),
+  ADD CONSTRAINT `projets` FOREIGN KEY (`projectID`) REFERENCES `musique` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `utilisateurs` FOREIGN KEY (`userID`) REFERENCES `Utilisateurs` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
 --
 -- Indexes for dumped tables
 --
