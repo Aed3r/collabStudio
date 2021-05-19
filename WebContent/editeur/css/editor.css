@@ -70,6 +70,7 @@ body {
     position: relative;
     flex-grow: 2;
     margin-bottom: 10px;
+    max-height: 80%;
 }
 
 #contentSelector {
@@ -94,7 +95,6 @@ body {
     border-radius: 10px;
     filter: blur(4px);
     pointer-events: none;
-    max-height: 80%;
 }
 
 #selectorSpan {

@@ -38,11 +38,11 @@ public class Projects{
 	            e1.printStackTrace();
 	        }
             //Puis ceux auquels l'utilisateur participe seulement
-            ResultSet Participe = d.reqSQL("SELECT projectID FROM userProjects WHERE usrID="+uid+";");
+            ResultSet Participe = d.reqSQL("SELECT projectID FROM userProjects WHERE userID="+uid+";");
             try{
                 while(Participe.next()){
-                    if(!projectsID.contains(Participe.getInt("projectID"))){
-                        projectsID.add(Participe.getInt("projectID"));
+                    if(!projectsid.contains(Participe.getInt("projectID"))){
+                    	projectsid.add(Participe.getInt("projectID"));
                     }
                 }
             }catch (SQLException e1) {
@@ -50,8 +50,8 @@ public class Projects{
 	        }
             //Et enfin on recupère tout les noms associés
             ResultSet ProName;
-            for(int i = 0; i < projectID.size(); i++){
-                ProName = d.reqSQL("SELECT titre FROM musique WHERE id="+projectID.get(i)+";");
+            for(int i = 0; i < projectsid.size(); i++){
+                ProName = d.reqSQL("SELECT titre FROM musique WHERE id="+projectsid.get(i)+";");
                 try{
                     if(ProName.next()) {
                         projectsName.add(ProName.getString("titre"));
