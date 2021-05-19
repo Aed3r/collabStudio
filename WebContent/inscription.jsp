@@ -12,7 +12,7 @@
     <body onresize="alignBox()">
         <div id="background">
             <div id="colors"></div>
-            <%@ include file = "header.html" %>
+            <%@ include file = "header.jsp" %>
             <div id="mainDiv">
                 <h2 id="greet">Bienvenue</h2>
                 <h4 id="contentQuestion">Veuillez entrer vos identifiants</h4>

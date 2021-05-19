@@ -1,7 +1,7 @@
 <%@page import="users.utilisateurs"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="bdd.Projects"%>
 <%@page import="java.util.ArrayList" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,11 +10,14 @@
     </head>
 
     <body>
+        <%@ include file = "header.jsp" %>
+
         <% if (session.getAttribute("pseudo") == null) {
             response.sendRedirect("/collabStudio/acceuil.html");
         }%>
         
-        <p>Vous êtes ${ sessionScope.pseudo } </p>
+        <h1>Bienvenue ${ sessionScope.pseudo }.</h1>
+        <!--
         <p>
         <% 
         String name =  (String) request.getAttribute("nom");
@@ -23,12 +26,7 @@
         out.println("Bonjour " + pseudo + "(" + name + " " + firstname + ")");
         %>
         </p>
-
-        <h1> Bienvenue sur la page d'acceuil de Collab studio</h1>
-        <a href="messagerie/tchatche.html"> Messagerie </a> <br>
-        <a href="inscription.jsp"> Inscription </a> <br>
-        <a href="connexion.jsp"> Connexion </a> <br>
-        <a href="<%=request.getContextPath()+"/Servlet_Deconnexion"%>">Deconnexion</a>
+        -->
 
         <% 
         Projects p = new Projects((String) session.getAttribute("pseudo"));
