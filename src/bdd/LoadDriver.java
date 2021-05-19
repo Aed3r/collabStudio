@@ -72,4 +72,15 @@ public class LoadDriver {
             return null;
         }
     }
+    
+    public PreparedStatement getPrep (String query) {
+    	try {
+			PreparedStatement stmt = c.prepareStatement(query);
+			return stmt;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+    }
 }

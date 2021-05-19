@@ -61,11 +61,15 @@ public class WebSocketHandler {
 			case "saveTrack":
 				String track = (String) json.get("track");
 				String projectID = (String) json.get("projectID");
+								
 				//On enregistre dans la DB
-				if(d.upSQL("INSERT INTO musique(track) VALUES (\""+track+"\") WHERE id=\"" + projectID +"\";")){
-					System.out.println("Inscription réussie");
-				} else {
-					System.out.println("Problème requete inscription");
+				PreparedStatement stmt = d.getPrep("UPDATE musique SET track=? WHERE titre LIKE \"" + projectID + "\";");
+				try {
+					stmt.setString(1, track);
+					stmt.execute();
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
 				d.close();
 				break;
@@ -75,46 +79,62 @@ public class WebSocketHandler {
 				// Enregistrer dans db
 				
 				ResultSet res = d.reqSQL("SELECT id FROM Utilisateurs WHERE pseudo=\"" + userName + "\"");
-				int uid;
+				int uid = -1;
 				try {
-					res.next();
-					uid = res.getInt("id");
+					if (res.next()) {
+						uid = res.getInt("id");
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 					return;
 				}
 
-
-				if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");")){
-					System.out.println("Inscription réussie");
-				}else{
-					System.out.println("Problème requete inscription");
+				if (uid != -1) {
+					if(d.upSQL("INSERT INTO musique(uid, titre) VALUES (\""+uid+"\",\"" + nom + "\");")){
+						System.out.println("Inscription réussie");
+					}else{
+						System.out.println("Problème requete inscription");
+					}
 				}
 				d.close();
 				break;
 			case "requestData":
 				String pID = (String) json.get("project");
 				String user = (String) json.get("username");
+				
 				// Envoyer sons
-				ResultSet sons_id = d.reqSQL("SELECT son_id FROM musique_sons WHERE musique_id="+pID+";");
-				try {
-					while(sons_id.next()){
-						//Recupere le son ici
-						sons_id.getString("son_id");
+				List<List<String>> newFiles = new ArrayList<>();
+				newFiles.add(new ArrayList<>());
+				newFiles.add(new ArrayList<>());
+				ResultSet sons_id = d.reqSQL("SELECT * FROM sons WHERE id IN (SELECT son_id FROM musique_sons WHERE musique_id IN (SELECT id FROM musique WHERE titre LIKE '"+pID+"'));");
+				if (sons_id != null) {
+					try {
+						while(sons_id.next()){
+							//Recupere le son ici
+							newFiles.get(0).add(sons_id.getString("son"));
+					        newFiles.get(1).add(sons_id.getString("nom"));
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
-				} catch (SQLException e1) {
-					e1.printStackTrace();
 				}
+				
+				sendFiles(newFiles, session);
 
 				// Envoyer track
-				ResultSet track = d.reqSQL("SELECT track FROM musique WHERE id="+pID+";");
-				try {
-					track.next();
-					//recuperer track ici
-					track_recup = track.getString("track");
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+				ResultSet morceau = d.reqSQL("SELECT track FROM musique WHERE titre LIKE '"+pID+"';");
+				if (morceau != null) {
+					try {
+						if(morceau.next()) {
+							//recuperer track ici
+							sendTrackUpdate(morceau.getString("track"), session);
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
+				
+				break;
 			default:
 				for (Session s : sessions) {
 					if (s != session) {
@@ -133,7 +153,7 @@ public class WebSocketHandler {
 	static void sendNewFilesUpdate (List<List<String>> newFiles) {	
 		String res = "{\"action\":\"newFiles\", \"data\":[";
 		int i;
-		
+
 		for (i = 0; i < newFiles.get(0).size()-1; i++) {
 			res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"], ";
 		}
@@ -146,6 +166,34 @@ public class WebSocketHandler {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	static void sendFiles (List<List<String>> newFiles, Session s) {	
+		String res = "{\"action\":\"loadSounds\", \"data\":[";
+		int i;
+		
+		for (i = 0; i < newFiles.get(0).size()-1; i++) {
+			res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"], ";
+		}
+		res += "[\"" + newFiles.get(0).get(i) + "\", \"" + newFiles.get(1).get(i) + "\"]]}";
+				
+		try {
+			s.getBasicRemote().sendText(res);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	static void sendTrackUpdate (String track, Session s) {
+		String res = "{\"action\":\"loadTrack\", \"track\":" + track + "}";
+		
+		try {
+			s.getBasicRemote().sendText(res);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

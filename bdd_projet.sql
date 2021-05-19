@@ -47,9 +47,9 @@ CREATE TABLE `messages` (
 --
 ;
 CREATE TABLE `musique` (
-  `id` int(11) NOT NULL PRIMARY KEY,
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `uid` int(11) NOT NULL,
-  `titre` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `titre` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `track` varchar(50000) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -71,8 +71,8 @@ CREATE TABLE `musique_sons` (
 --
 CREATE TABLE `sons` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `son` varchar(200),
-  `nom` varchar(50)
+  `son` varchar(500),
+  `nom` varchar(500)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

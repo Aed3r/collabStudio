@@ -16,6 +16,15 @@ class Node {
     }
 }
 
+function objToNode(obj) {
+    if (obj == null) return null;
+
+    let newNode = new Node(obj.id, obj.data);
+    newNode.next = objToNode(obj.next);
+
+    return newNode;
+}
+
 class LinkedList {
     constructor(head = null) {
         this.head = head;
@@ -67,7 +76,7 @@ class LinkedList {
 
             if (last == null) this.head = newNode;
             else last.next = newNode;
-        } else { 
+        } else {
             if (this.head)
                 this.getLast().next = newNode;
             else
@@ -181,4 +190,9 @@ class LinkedList {
 
         return node;
     }
+}
+
+function objToList(obj) {
+    if (obj == null) return null;
+    else return new LinkedList(objToNode(obj.head));
 }

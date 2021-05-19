@@ -3,7 +3,7 @@
     <html>
 
     <head>
-        <title>Connexion</title>
+        <title>Nouveau Projet</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/newProject.css">
         <script src="js/newProject.js" async defer></script>

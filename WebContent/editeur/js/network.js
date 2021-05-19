@@ -4,7 +4,10 @@ function connectToWebsocket() {
     let node = null;
     ws = new WebSocket(document.location.origin.replace(/^http(.*)/, "ws$1") + "/collabStudio/wsHandler");
 
-    ws.onopen = function() {};
+    ws.onopen = function() {
+        // On récupère les données du projet
+        if (typeof projectName !== 'undefined') requestData(projectName, userName);
+    };
     ws.onclose = function() {
         console.log("Connection au serveur fermé !");
     };
@@ -35,12 +38,14 @@ function connectToWebsocket() {
                 break;
 
             case "loadTrack":
+                console.log("preparing track");
                 prepareNewTrack(m.track);
                 if (soundsLoaded) loadTrack();
                 break;
 
             case "loadSounds":
-                loadSounds(m.sounds);
+                console.log("loading sounds");
+                loadSounds(m.data);
                 break;
 
             default:

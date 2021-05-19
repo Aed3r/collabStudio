@@ -28,15 +28,14 @@ import bdd.LoadDriver;
 @MultipartConfig
 public class FileUpload extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static File uploadsFolder;
+	private static File uploadsFolder = null;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public FileUpload() {
         super();
-        uploadsFolder = new File(System.getProperty("user.home"), "collabStudioUploads");
-        if (!uploadsFolder.exists()) uploadsFolder.mkdir();
+        uploadsFolder = getUploadsFolder();
     }
 
 	/**
@@ -62,20 +61,31 @@ public class FileUpload extends HttpServlet {
 	        
 	        // Enregistrer dans db : (projectID, destination.name)
 			LoadDriver d = new LoadDriver();
-			int id;
 
-			if(d.upSQL("INSERT INTO sons(son, nom) VALUES (\""+destination.name+"\", \"",+fileName+"\");"))
+			if(d.upSQL("INSERT INTO sons(son, nom) VALUES (\""+destination.getName()+"\", \""+fileName+"\");")) {
 				System.out.println("INSERTION OK");
 			} else {
 				System.out.println("Problème requete INSERT SON");
 			}
 
-
+			int idSon = -1;
 			ResultSet res = d.reqSQL("SELECT id FROM sons WHERE son =\"" + destination.getName() + "\"");
-			int id;
 			try {
-				res.next();
-				id = res.getInt("id");
+				if (res.next()) {
+					idSon = res.getInt("id");
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return;
+			}
+			
+			int idProjet = -1;
+			res = d.reqSQL("SELECT id FROM musique WHERE titre LIKE \"" + projectID + "\"");
+			try {
+				if (res.next()) {
+					idProjet = res.getInt("id");
+				}
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -83,11 +93,14 @@ public class FileUpload extends HttpServlet {
 			}
 
 
-
-			if(d.upSQL("INSERT INTO musique_sons(musique_id, son_id) VALUES (\""+projectID+"\",\"" + id + "\");")) {
-				System.out.println("LINK REUSSI");
+			if (idSon != -1 && idProjet != -1) {
+				if(d.upSQL("INSERT INTO musique_sons(musique_id, son_id) VALUES (\""+idProjet+"\",\"" + idSon + "\");")) {
+					System.out.println("LINK REUSSI");
+				} else {
+					System.out.println("Problème requete INSERT MUSIQUE_SON");
+				}
 			} else {
-				System.out.println("Problème requete INSERT MUSIQUE_SON");
+				System.err.println("Problème d'insertion dans la table sons ");
 			}
 
 			d.close();
@@ -98,6 +111,10 @@ public class FileUpload extends HttpServlet {
 	}
 	
 	protected static File getUploadsFolder() {
+		if (uploadsFolder == null) {
+			uploadsFolder = new File(System.getProperty("user.home"), "collabStudioUploads");
+	        if (!uploadsFolder.exists()) uploadsFolder.mkdir();
+		}
 		return uploadsFolder;
 	}
 }

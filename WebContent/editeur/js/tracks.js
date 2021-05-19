@@ -16,6 +16,7 @@ function newTrack(id) {
     template.querySelector(".track").setAttribute("id", "track" + id);
     template.querySelector(".trackID").innerHTML = "Track " + id;
     template.querySelector(".trackBody").setAttribute("id", "trackBody" + id);
+    template.querySelector(".slider").value = 100;
 
     return template;
 }
@@ -175,13 +176,13 @@ function lancerMarqueur() {
 
     if (correction) avance += correction;
 
-    if(!correctionStarted) {
+    if (!correctionStarted) {
         correctionStarted = true;
         setTimeout(correctMarker, 1000);
         startingTime = xMarker;
     }
 
-    timeoutID = setTimeout(lancerMarqueur, 1000/fps);
+    timeoutID = setTimeout(lancerMarqueur, 1000 / fps);
 
     xMarker += avance;
     drawMeasures();
@@ -258,4 +259,8 @@ function getNbPistes() {
 
 function getPosMarker() {
     return xMarker;
+}
+
+function getTrackVolume(trackID) {
+    return document.getElementById(trackID).parentElement.querySelector(".slider").value;
 }

@@ -101,7 +101,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     position: absolute;
     font-weight: 400;
-    color:darkslategray;
+    color: darkslategray;
 }
 
 .soundItem {
@@ -148,6 +148,7 @@ body {
     text-overflow: ellipsis;
     max-width: 100%;
     overflow: hidden;
+    max-height: 100%;
 }
 
 .ghost {
@@ -204,7 +205,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     text-align: center;
     cursor: pointer;
-    color:black;
+    color: black;
 }
 
 #affichageMsg {
@@ -226,7 +227,7 @@ body {
 #entreeMsg {
     flex-grow: 2;
     margin-left: 5px;
-    border-radius: 5px; 
+    border-radius: 5px;
     margin-right: 3px;
 }
 
@@ -235,7 +236,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     margin-right: 3px;
     border-radius: 5px;
-} 
+}
 
 #nomUtilisateur {
     display: none;

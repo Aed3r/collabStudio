@@ -21,10 +21,7 @@ if (hash && hash.length > 0) {
 // On récupère le nom de l'utilisateur
 userName = document.getElementById("nomUtilisateur").textContent;
 
-if(userName == "") document.location.pathname = '/collabStudio';
-
-// On récupère les données du projet
-requestData(projectName, userName);
+if (userName == "") document.location.pathname = '/collabStudio';
 
 
 function newItem(id, title) {
@@ -270,17 +267,18 @@ var currentlyPlaying = [];
 var lastTimeout = null;
 
 // Joue un son de la continuité de sons
-function playSound (node, doContinue, start = 0) {
+function playSound(node, doContinue, start = 0) {
     if (playingStatus == "playing") {
         let clip = sounds[node.data.soundID];
 
         clip.currentTime = start / 1000;
+        clip.volume = getTrackVolume(node.data.trackID) / 100;
 
         clip.play();
         currentlyPlaying.push(node.data.soundID);
         setTimeout(function(id) { currentlyPlaying.splice(currentlyPlaying.indexOf(id), 1); }, node.data.length - start, node.data.soundID);
 
-        if (doContinue && node.next) 
+        if (doContinue && node.next)
             lastTimeout = setTimeout(playSound, node.next.data.time - node.data.time - start, node.next, true);
     }
 }
@@ -319,7 +317,7 @@ function playTrack(markerMoved = false) {
             // On cherche le première son se trouvant sur le marqueur et on lance ceux se trouvant également dessus
             while (node) {
                 if (node.data.time < posMarker && node.data.time + node.data.length > posMarker) {
-                    if (oldest == null || oldest.data.time+oldest.data.length < node.data.time+node.data.length) {
+                    if (oldest == null || oldest.data.time + oldest.data.length < node.data.time + node.data.length) {
                         if (oldest) playSound(oldest, false, oldest.data.time + oldest.data.length - posMarker);
                         oldest = node;
                     } else {
@@ -348,7 +346,7 @@ function playTrack(markerMoved = false) {
 
             clearCurrentlyPlaying();
             break;
-        
+
         default:
             break;
     }
@@ -387,7 +385,7 @@ function envoyerMsg() {
     }
 }
 
-function afficherMsg (msg) {
+function afficherMsg(msg) {
     let affichageMsg = document.getElementById("affichageMsg");
     let messagerie = document.getElementById("messagerie");
     let currentDate = new Date();
@@ -403,11 +401,11 @@ function afficherMsg (msg) {
 let input = document.getElementById("entreeMsg");
 
 input.addEventListener("keyup", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("envoyerMsg").click();
-  }
-}); 
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("envoyerMsg").click();
+    }
+});
 
 function enregistrer() {
     sendTrack(track, projectName, userName);
@@ -417,10 +415,11 @@ var soundsLoaded = false;
 var trackToLoad = null;
 
 function prepareNewTrack(newTrack) {
-    trackToLoad = newTrack;
+    trackToLoad = objToList(newTrack);
 }
 
 function loadTrack() {
+    console.log("loading track");
     track = trackToLoad;
     let node = track.head;
 
@@ -429,17 +428,19 @@ function loadTrack() {
         node = node.next;
     }
     trackToLoad = null;
+    console.log("track loaded");
 }
 
 function getProjectName() {
     return projectName;
 }
 
-function loadSounds (sounds) {
+function loadSounds(sounds) {
     sounds.forEach(sound => {
-        newItem(sound.soundID, sound.title);
+        newItem(sound[0], sound[1]);
     });
 
     soundsLoaded = true;
+    console.log("sounds loaded");
     if (trackToLoad) loadTrack();
 }
