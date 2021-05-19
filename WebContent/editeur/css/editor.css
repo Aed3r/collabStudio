@@ -94,6 +94,7 @@ body {
     border-radius: 10px;
     filter: blur(4px);
     pointer-events: none;
+    max-height: 80%;
 }
 
 #selectorSpan {
