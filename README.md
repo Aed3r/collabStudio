@@ -7,12 +7,12 @@ Account creation / Login page (clickable)
 ![Project selection](https://imgur.com/8GEV879)
 Project creation / Selection
 
-![Project selection](https://imgur.com/nmqNwyJ)
+![Empty Editor](https://imgur.com/nmqNwyJ)
 Empty editor
  - Import new audio clips on the bottom left
  - Message people working on the project on the bottom right
 
-![Project selection](https://imgur.com/2p83g9M)
+![WIP editor](https://imgur.com/2p83g9M)
 Work in progress project
  - Preview and select audio clips on the left
  - Add them to the project with left clicks on the desired track and location
