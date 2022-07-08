@@ -1,18 +1,18 @@
-[![Watch the video](https://imgur.com/57x2yfs)](https://youtu.be/XO4gmQ-UFTs)
+[![Watch the video](https://imgur.com/57x2yfs.png)](https://youtu.be/XO4gmQ-UFTs)
 Landing page (clickable)
 
-[![Watch the video](https://imgur.com/l2LThie)](https://youtu.be/_pesI5PGb4U)
+[![Watch the video](https://imgur.com/l2LThie.png)](https://youtu.be/_pesI5PGb4U)
 Account creation / Login page (clickable)
 
-![Project selection](https://imgur.com/8GEV879)
+![Project selection](https://imgur.com/8GEV879.png)
 Project creation / Selection
 
-![Empty Editor](https://imgur.com/nmqNwyJ)
+![Empty Editor](https://imgur.com/nmqNwyJ.png)
 Empty editor
  - Import new audio clips on the bottom left
  - Message people working on the project on the bottom right
 
-![WIP editor](https://imgur.com/2p83g9M)
+![WIP editor](https://imgur.com/2p83g9M.png)
 Work in progress project
  - Preview and select audio clips on the left
  - Add them to the project with left clicks on the desired track and location
