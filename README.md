@@ -1,4 +1,4 @@
-[![Watch the video](https://imgur.com/57x2yfs.png)](https://youtu.be/XO4gmQ-UFTs)
+[![Watch the video](https://imgur.com/57x2yfs.png)](https://youtu.be/9Oj_1cHHJvs)
 Landing page (clickable)
 
 [![Watch the video](https://imgur.com/l2LThie.png)](https://youtu.be/_pesI5PGb4U)
